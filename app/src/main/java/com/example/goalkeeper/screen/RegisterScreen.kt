@@ -21,14 +21,20 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.Style.loginTextStyle
 import com.example.goalkeeper.component.RectWithRoundedEnds
 import com.example.goalkeeper.component.GoalKeeperTextField
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
 fun RegisterScreen(navController: NavHostController) {
+
+    val viewModel: GoalKeeperViewModel =
+        viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
     var userID by remember { mutableStateOf("") }
     var userPassword by remember { mutableStateOf("") }
@@ -60,8 +66,8 @@ fun RegisterScreen(navController: NavHostController) {
         Box(
             modifier = Modifier.clickable {
                 /* 회원 정보 DB에 저장 기능 추가 */
-
-                navController.navigate("welcome")
+                if(viewModel.register(userID, userPassword))
+                    navController.navigate("welcome")
             },
             contentAlignment = Alignment.Center
         ) {
