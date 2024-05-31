@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -19,9 +23,14 @@ import androidx.navigation.NavHostController
 import com.example.goalkeeper.R
 import com.example.goalkeeper.Style.loginTextStyle
 import com.example.goalkeeper.component.RectWithRoundedEnds
+import com.example.goalkeeper.component.WelcomeTextField
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
+
+    var userID by remember { mutableStateOf("") }
+    var userPassword by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -32,11 +41,14 @@ fun WelcomeScreen(navController: NavHostController) {
             contentDescription = "로고",
             modifier = Modifier.size(180.dp)
         )
-        RectWithRoundedEnds(300, 60)
+
+        WelcomeTextField(width = 300, height = 60, value = userID, label = "ID") { userID = it }
         Spacer(modifier = Modifier.padding(5.dp))
-        RectWithRoundedEnds(300, 60)
+        WelcomeTextField(width = 300, height = 60, value = userPassword, label = "PASSWORD") { userPassword = it }
         Spacer(modifier = Modifier.padding(20.dp))
-        Box(modifier = Modifier.clickable { navController.navigate("main")},
+
+        Box(
+            modifier = Modifier.clickable { navController.navigate("main") },
             contentAlignment = Alignment.Center
         ) {
             RectWithRoundedEnds(230, 60, color = colorResource(id = R.color.violet))
