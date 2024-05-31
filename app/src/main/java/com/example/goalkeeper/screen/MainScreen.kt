@@ -26,7 +26,7 @@ import com.example.goalkeeper.nav.BottomNavItem
 fun MainScreen() {
     val navController = rememberNavController()
     Scaffold(
-        topBar= {TopTitleBar(navController)},
+        topBar = { TopTitleBar(navController) },
         bottomBar = { BottomNavigationBar(navController) }
     ) { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
@@ -49,7 +49,11 @@ fun TopTitleBar(navController: NavHostController) {
     androidx.compose.material.TopAppBar(
         title = {
             when (currentRoute) {
-                "home" -> androidx.compose.material.Text(text = "Goal Keeper", style = EngTitleStyle)
+                "home" -> androidx.compose.material.Text(
+                    text = "Goal Keeper",
+                    style = EngTitleStyle
+                )
+
                 "time" -> androidx.compose.material.Text(text = "일정", style = KorTitleStyle)
                 "mypage" -> androidx.compose.material.Text(text = "마이페이지", style = KorTitleStyle)
                 else -> "앱 이름"
@@ -68,16 +72,22 @@ fun BottomNavigationBar(navController: NavHostController) {
     )
 
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.violet)) {
+        backgroundColor = colorResource(id = R.color.violet)
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(item.icon, contentDescription = item.title,
-                    modifier = Modifier.size(50.dp),
-                    tint = if (currentRoute == item.route) colorResource(R.color.violet_dark) else colorResource(id = R.color.light_pink)
-                ) },
+                icon = {
+                    Icon(
+                        item.icon, contentDescription = item.title,
+                        modifier = Modifier.size(50.dp),
+                        tint = if (currentRoute == item.route) colorResource(R.color.violet_dark) else colorResource(
+                            id = R.color.light_pink
+                        )
+                    )
+                },
 //                label = { Text(item.title) },
                 selected = currentRoute == item.route,
                 onClick = {

@@ -1,7 +1,5 @@
 package com.example.goalkeeper.screen
 
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,8 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.goalkeeper.R
 import com.example.goalkeeper.Style.loginTextStyle
@@ -27,7 +28,8 @@ import com.example.goalkeeper.component.RectWithRoundedEnds
 import com.example.goalkeeper.component.GoalKeeperTextField
 
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController) {
+
     var userID by remember { mutableStateOf("") }
     var userPassword by remember { mutableStateOf("") }
 
@@ -36,32 +38,35 @@ fun WelcomeScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "로고",
-            modifier = Modifier.size(180.dp)
+        Text(
+            text = "회원가입",
+            fontFamily = FontFamily(Font(R.font.freesentation_8extrabold)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+            color = colorResource(R.color.violet),
+            modifier = Modifier.padding(20.dp)
         )
 
         GoalKeeperTextField(width = 300, height = 60, value = userID, label = "ID") { userID = it }
         Spacer(modifier = Modifier.padding(5.dp))
-        GoalKeeperTextField(width = 300, height = 60, value = userPassword, label = "PASSWORD") { userPassword = it }
+        GoalKeeperTextField(
+            width = 300,
+            height = 60,
+            value = userPassword,
+            label = "PASSWORD"
+        ) { userPassword = it }
         Spacer(modifier = Modifier.padding(20.dp))
 
         Box(
-            modifier = Modifier.clickable { navController.navigate("main") },
-            contentAlignment = Alignment.Center
-        ) {
-            RectWithRoundedEnds(230, 60, color = colorResource(id = R.color.violet))
-            androidx.compose.material3.Text(text = "로그인/시작하기", style = loginTextStyle)
-        }
+            modifier = Modifier.clickable {
+                /* 회원 정보 DB에 저장 기능 추가 */
 
-        Spacer(modifier = Modifier.padding(10.dp))
-        Box(
-            modifier = Modifier.clickable { navController.navigate("register") },
+                navController.navigate("welcome")
+            },
             contentAlignment = Alignment.Center
         ) {
             RectWithRoundedEnds(230, 60, color = colorResource(id = R.color.violet))
-            androidx.compose.material3.Text(text = "회원가입", style = loginTextStyle)
+            androidx.compose.material3.Text(text = "완료", style = loginTextStyle)
         }
     }
 }

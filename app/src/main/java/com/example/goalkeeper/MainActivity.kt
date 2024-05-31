@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.screen.MainScreen
+import com.example.goalkeeper.screen.RegisterScreen
 import com.example.goalkeeper.screen.WelcomeScreen
 import com.example.goalkeeper.ui.theme.GoalKeeperTheme
 
@@ -38,5 +39,6 @@ fun MyApp() {
     NavHost(navController, startDestination = "welcome") {
         composable("welcome") { WelcomeScreen(navController) }
         composable("main") { MainScreen() }
+        composable("register") { RegisterScreen(navController) }
     }
 }

@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.goalkeeper.Style.loginTextStyle
 
 @Composable
-fun WelcomeTextField(width: Int, height: Int, color: Color = Color.LightGray, value: String, label: String, onValueChange: (String) -> Unit) {
+fun GoalKeeperTextField(width: Int, height: Int, color: Color = Color.LightGray, value: String, label: String, onValueChange: (String) -> Unit) {
     Box(
         modifier = Modifier
             .size(width = width.dp, height = height.dp)
             .background(
                 color = color,
-                shape = RoundedCornerShape((height / 2).dp) // 높이의 절반에 해당하는 반경으로 모서리를 둥글게 처리
+                shape = RoundedCornerShape((height / 2).dp)
             )
     ) {
         TextField(
