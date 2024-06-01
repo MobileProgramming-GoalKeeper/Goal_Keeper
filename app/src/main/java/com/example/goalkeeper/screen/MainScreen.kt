@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,9 +20,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.R
-import com.example.goalkeeper.Style.EngTitleStyle
-import com.example.goalkeeper.Style.KorTitleStyle
 import com.example.goalkeeper.nav.BottomNavItem
+import com.example.goalkeeper.style.AppStyles.engTitleStyle
+import com.example.goalkeeper.style.AppStyles.korTitleStyle
 
 @Composable
 fun MainScreen() {
@@ -42,21 +44,22 @@ fun MainScreen() {
     }
 }
 
+
 @Composable
 fun TopTitleBar(navController: NavHostController) {
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
-    androidx.compose.material.TopAppBar(
+    TopAppBar(
         title = {
             when (currentRoute) {
-                "home" -> androidx.compose.material.Text(
+                "home" -> Text(
                     text = "Goal Keeper",
-                    style = EngTitleStyle
+                    style = engTitleStyle
                 )
 
-                "time" -> androidx.compose.material.Text(text = "일정", style = KorTitleStyle)
-                "mypage" -> androidx.compose.material.Text(text = "마이페이지", style = KorTitleStyle)
-                else -> "앱 이름"
+                "time" -> Text(text = "일정", style = korTitleStyle)
+                "mypage" -> Text(text = "마이페이지", style = korTitleStyle)
+//                else -> "앱 이름"
             }
         },
         backgroundColor = colorResource(id = R.color.violet)

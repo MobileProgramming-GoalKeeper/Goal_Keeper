@@ -1,18 +1,93 @@
 package com.example.goalkeeper.screen
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
+import com.example.goalkeeper.R
+import com.example.goalkeeper.component.GoalKeeperButton
+import com.example.goalkeeper.style.AppStyles.korTitleStyle
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
 fun MyPageScreen() {
-    Box(
+    val navController = rememberNavController()
+
+    val viewModel: GoalKeeperViewModel =
+        viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "My Page Screen")
+        Spacer(modifier = Modifier.padding(15.dp))
+        NavHost(navController = navController, startDestination = "mypage") {
+            composable("mypage") {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = viewModel.userID,
+                        fontSize = 40.sp,
+                        modifier = Modifier.padding(20.dp),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.freesentation_8extrabold)),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp,
+                            color = Color.Black
+                        )
+                    )
+
+                    GoalKeeperButton(
+                        width = 300,
+                        height = 60,
+                        text = "통계",
+                        textStyle = korTitleStyle
+                    ) {
+                        navController.navigate("statistics")
+                    }
+                    Spacer(modifier = Modifier.padding(15.dp))
+                    GoalKeeperButton(
+                        width = 300,
+                        height = 60,
+                        text = "루틴",
+                        textStyle = korTitleStyle
+                    ) {
+                        navController.navigate("routine")
+                    }
+                    Spacer(modifier = Modifier.padding(15.dp))
+                    GoalKeeperButton(
+                        width = 300,
+                        height = 60,
+                        text = "테마색",
+                        textStyle = korTitleStyle
+                    ) {
+                        navController.navigate("themeColor")
+                    }
+                }
+            }
+            composable("statistics") { StatisticsScreen(navController) }
+            composable("routine") { RoutineScreen(navController) }
+            composable("themeColor") { ThemeColorScreen(navController) }
+        }
     }
 }

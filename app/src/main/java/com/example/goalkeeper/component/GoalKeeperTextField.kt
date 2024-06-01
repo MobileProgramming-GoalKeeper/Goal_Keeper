@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.goalkeeper.Style.loginTextStyle
+import com.example.goalkeeper.style.AppStyles.loginTextStyle
 
 @Composable
 fun GoalKeeperTextField(width: Int, height: Int, color: Color = Color.LightGray, value: String, label: String, onValueChange: (String) -> Unit) {
