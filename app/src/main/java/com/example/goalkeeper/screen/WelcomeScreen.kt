@@ -22,6 +22,8 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.component.GoalKeeperTextField
+import com.example.goalkeeper.nav.Routes
+import com.example.goalkeeper.style.AppStyles.loginTextStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
@@ -54,13 +56,23 @@ fun WelcomeScreen(navController: NavHostController) {
         ) { userPassword = it }
 
         Spacer(modifier = Modifier.padding(20.dp))
-        GoalKeeperButton(width = 230, height = 60, text = "로그인/시작하기") {
+        GoalKeeperButton(
+            width = 230,
+            height = 60,
+            text = "로그인/시작하기",
+            textStyle = loginTextStyle
+        ) {
             if (viewModel.login(userID, userPassword))
-                navController.navigate("main")
+                navController.navigate(Routes.Main.route)
         }
         Spacer(modifier = Modifier.padding(10.dp))
-        GoalKeeperButton(width = 230, height = 60, text = "회원가입") {
-            navController.navigate("register")
+        GoalKeeperButton(
+            width = 230,
+            height = 60,
+            text = "회원가입",
+            textStyle = loginTextStyle
+        ) {
+            navController.navigate(Routes.Register.route)
         }
     }
 }

@@ -1,8 +1,6 @@
 package com.example.goalkeeper.screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,9 +23,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
-import com.example.goalkeeper.Style.loginTextStyle
-import com.example.goalkeeper.component.RectWithRoundedEnds
+import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.component.GoalKeeperTextField
+import com.example.goalkeeper.nav.Routes
+import com.example.goalkeeper.style.AppStyles.loginTextStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
@@ -53,7 +52,12 @@ fun RegisterScreen(navController: NavHostController) {
             modifier = Modifier.padding(20.dp)
         )
 
-        GoalKeeperTextField(width = 300, height = 60, value = userID, label = "ID") { userID = it }
+        GoalKeeperTextField(
+            width = 300,
+            height = 60,
+            value = userID,
+            label = "ID"
+        ) { userID = it }
         Spacer(modifier = Modifier.padding(5.dp))
         GoalKeeperTextField(
             width = 300,
@@ -61,18 +65,17 @@ fun RegisterScreen(navController: NavHostController) {
             value = userPassword,
             label = "PASSWORD"
         ) { userPassword = it }
-        Spacer(modifier = Modifier.padding(20.dp))
 
-        Box(
-            modifier = Modifier.clickable {
-                /* 회원 정보 DB에 저장 기능 추가 */
-                if(viewModel.register(userID, userPassword))
-                    navController.navigate("welcome")
-            },
-            contentAlignment = Alignment.Center
+        Spacer(modifier = Modifier.padding(20.dp))
+        GoalKeeperButton(
+            width = 230,
+            height = 60,
+            text = "완료",
+            textStyle = loginTextStyle
         ) {
-            RectWithRoundedEnds(230, 60, color = colorResource(id = R.color.violet))
-            androidx.compose.material3.Text(text = "완료", style = loginTextStyle)
+            /* 회원 정보 DB에 저장 기능 추가 */
+            if (viewModel.register(userID, userPassword))
+                navController.navigate(Routes.Welcome.route)
         }
     }
 }

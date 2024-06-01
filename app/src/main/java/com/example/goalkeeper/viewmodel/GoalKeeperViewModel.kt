@@ -3,7 +3,7 @@ package com.example.goalkeeper.viewmodel
 import androidx.lifecycle.ViewModel
 
 class GoalKeeperViewModel(): ViewModel() {
-//    val userID = "user"
+    val userID = "user"
 //    val userPassword = "1234"
 
     fun login(userID: String, userPassword: String): Boolean {
