@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.screen.MainScreen
 import com.example.goalkeeper.screen.RegisterScreen
 import com.example.goalkeeper.screen.WelcomeScreen
@@ -57,10 +58,10 @@ fun MyApp() {
     CompositionLocalProvider(
         LocalNavGraphViewModelStoreOwner provides navStoreOwner
     ) {
-        NavHost(navController, startDestination = "welcome") {
-            composable("welcome") { WelcomeScreen(navController) }
-            composable("main") { MainScreen() }
-            composable("register") { RegisterScreen(navController) }
+        NavHost(navController, startDestination = Routes.Welcome.route) {
+            composable(Routes.Welcome.route) { WelcomeScreen(navController) }
+            composable(Routes.Main.route) { MainScreen() }
+            composable(Routes.Register.route) { RegisterScreen(navController) }
         }
     }
 

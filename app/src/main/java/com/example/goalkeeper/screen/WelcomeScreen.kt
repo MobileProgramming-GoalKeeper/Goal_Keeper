@@ -22,6 +22,7 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.component.GoalKeeperTextField
+import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.loginTextStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
@@ -62,7 +63,7 @@ fun WelcomeScreen(navController: NavHostController) {
             textStyle = loginTextStyle
         ) {
             if (viewModel.login(userID, userPassword))
-                navController.navigate("main")
+                navController.navigate(Routes.Main.route)
         }
         Spacer(modifier = Modifier.padding(10.dp))
         GoalKeeperButton(
@@ -71,7 +72,7 @@ fun WelcomeScreen(navController: NavHostController) {
             text = "회원가입",
             textStyle = loginTextStyle
         ) {
-            navController.navigate("register")
+            navController.navigate(Routes.Register.route)
         }
     }
 }

@@ -25,6 +25,7 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.component.GoalKeeperTextField
+import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.loginTextStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
@@ -74,7 +75,7 @@ fun RegisterScreen(navController: NavHostController) {
         ) {
             /* 회원 정보 DB에 저장 기능 추가 */
             if (viewModel.register(userID, userPassword))
-                navController.navigate("welcome")
+                navController.navigate(Routes.Welcome.route)
         }
     }
 }

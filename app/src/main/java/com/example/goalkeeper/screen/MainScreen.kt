@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.R
 import com.example.goalkeeper.nav.BottomNavItem
+import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.engTitleStyle
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 
@@ -34,11 +35,11 @@ fun MainScreen() {
         Column(modifier = Modifier.padding(contentPadding)) {
             NavHost(
                 navController = navController,
-                startDestination = "home"
+                startDestination = Routes.Home.route
             ) {
-                composable("time") { TimeScreen() }
-                composable("home") { HomeScreen() }
-                composable("mypage") { MyPageScreen() }
+                composable(Routes.Time.route) { TimeScreen() }
+                composable(Routes.Home.route) { HomeScreen() }
+                composable(Routes.MyPage.route) { MyPageScreen() }
             }
         }
     }
@@ -52,13 +53,13 @@ fun TopTitleBar(navController: NavHostController) {
     TopAppBar(
         title = {
             when (currentRoute) {
-                "home" -> Text(
+                Routes.Home.route -> Text(
                     text = "Goal Keeper",
                     style = engTitleStyle
                 )
 
-                "time" -> Text(text = "일정", style = korTitleStyle)
-                "mypage" -> Text(text = "마이페이지", style = korTitleStyle)
+                Routes.Time.route -> Text(text = "일정", style = korTitleStyle)
+                Routes.MyPage.route -> Text(text = "마이페이지", style = korTitleStyle)
 //                else -> "앱 이름"
             }
         },

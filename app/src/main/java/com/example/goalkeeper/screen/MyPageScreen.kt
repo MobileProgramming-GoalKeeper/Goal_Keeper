@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
+import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
@@ -39,8 +40,8 @@ fun MyPageScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.padding(15.dp))
-        NavHost(navController = navController, startDestination = "mypage") {
-            composable("mypage") {
+        NavHost(navController = navController, startDestination = Routes.MyPage.route) {
+            composable(Routes.MyPage.route) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -63,7 +64,7 @@ fun MyPageScreen() {
                         text = "통계",
                         textStyle = korTitleStyle
                     ) {
-                        navController.navigate("statistics")
+                        navController.navigate(Routes.Statistics.route)
                     }
                     Spacer(modifier = Modifier.padding(15.dp))
                     GoalKeeperButton(
@@ -72,7 +73,7 @@ fun MyPageScreen() {
                         text = "루틴",
                         textStyle = korTitleStyle
                     ) {
-                        navController.navigate("routine")
+                        navController.navigate(Routes.Routine.route)
                     }
                     Spacer(modifier = Modifier.padding(15.dp))
                     GoalKeeperButton(
@@ -81,13 +82,13 @@ fun MyPageScreen() {
                         text = "테마색",
                         textStyle = korTitleStyle
                     ) {
-                        navController.navigate("themeColor")
+                        navController.navigate(Routes.ThemeColor.route)
                     }
                 }
             }
-            composable("statistics") { StatisticsScreen(navController) }
-            composable("routine") { RoutineScreen(navController) }
-            composable("themeColor") { ThemeColorScreen(navController) }
+            composable(Routes.Statistics.route) { StatisticsScreen(navController) }
+            composable(Routes.Routine.route) { RoutineScreen(navController) }
+            composable(Routes.ThemeColor.route) { ThemeColorScreen(navController) }
         }
     }
 }
