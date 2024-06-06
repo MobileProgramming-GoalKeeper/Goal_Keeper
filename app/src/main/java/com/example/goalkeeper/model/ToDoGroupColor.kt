@@ -12,6 +12,9 @@ enum class ToDoGroupColor(val rgb: Int) {
     PINK(0xFFC0CB),
     BROWN(0xA52A2A);
 
+    override fun toString(): String {
+        return name
+    }
     fun toColor(): Color {
         return Color(
             red = ((rgb shr 16) and 0xFF) / 255f,

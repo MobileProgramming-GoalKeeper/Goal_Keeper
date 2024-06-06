@@ -5,8 +5,8 @@ data class TodoGroup(
     val userId: Int,
     var groupName: String,
     var mainTodo: List<Todo> = listOf(),
-    var color: ToDoGroupColor = ToDoGroupColor.BLUE,
-    var icon: ToDoGroupIcon = ToDoGroupIcon.FAVORITE,
+    var color: String = ToDoGroupColor.BLUE.toString(),
+    var icon: String = ToDoGroupIcon.FAVORITE.toString(),
 )
 {
     constructor():this (0,0,"groupName")

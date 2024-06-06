@@ -20,4 +20,8 @@ enum class ToDoGroupIcon(val imgVector: ImageVector) {
     WARNING(Icons.Filled.Warning),
     LOCATION_ON(Icons.Filled.LocationOn),
     PENCIL(Icons.Filled.Create);
+
+    override fun toString(): String {
+        return name
+    }
 }

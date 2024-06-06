@@ -31,15 +31,17 @@ import com.example.goalkeeper.model.Todo
 @Composable
 fun ToDoGroupPrint(toDoGroup: TodoGroup, onMenuIconClick:(Todo) -> Unit) {
     var todos by remember { mutableStateOf(toDoGroup.mainTodo) }
+    val colorEnum = ToDoGroupColor.valueOf(toDoGroup.color)
+    val iconEnum = ToDoGroupIcon.valueOf(toDoGroup.icon)
 
     Box(contentAlignment = Alignment.CenterStart) {
         TopRoundedRectangle(500, 50, colorResource(id = R.color.bright_gray))
         Row {
             Spacer(modifier = Modifier.padding(start = 20.dp))
             Icon(
-                imageVector = toDoGroup.icon.imgVector,
+                imageVector = iconEnum.imgVector,
                 contentDescription = toDoGroup.groupName,
-                tint = toDoGroup.color.toColor()
+                tint = colorEnum.toColor()
             )
             Spacer(modifier = Modifier.padding(5.dp))
             Text(text = toDoGroup.groupName, style = AppStyles.GroupNameStyle)

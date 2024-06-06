@@ -14,7 +14,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.goalkeeper.component.todo.ToDoGroupPrint
 import com.example.goalkeeper.component.todo.TodoDetailView
-import com.example.goalkeeper.model.TestTodoPrint
 import com.example.goalkeeper.model.ToDoGroupColor
 import com.example.goalkeeper.model.ToDoGroupIcon
 import com.example.goalkeeper.model.Todo
@@ -49,8 +48,8 @@ fun HomeScreen() {
         userId = 1,
         groupName = "공부",
         mainTodo = mainTodo,
-        color = ToDoGroupColor.RED,
-        icon = ToDoGroupIcon.PENCIL
+        color = ToDoGroupColor.RED.toString(),
+        icon = ToDoGroupIcon.PENCIL.toString()
     )
 
     Box(
@@ -64,8 +63,8 @@ fun HomeScreen() {
             ToDoGroupPrint(toDoGroup = exTodoGroup.copy(
                 groupId = 2,
                 groupName = "위시리스트",
-                color = ToDoGroupColor.PINK,
-                icon = ToDoGroupIcon.SHOPPING_CART
+                color = ToDoGroupColor.PINK.toString(),
+                icon = ToDoGroupIcon.SHOPPING_CART.toString()
             )) { todo ->
                 navController.navigate("todoMenu/${todo.todoId}")
             }
