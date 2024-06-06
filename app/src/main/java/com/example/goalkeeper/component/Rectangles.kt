@@ -21,3 +21,15 @@ fun RectWithRoundedEnds(width: Int, height: Int, color: Color = Color.LightGray)
             )
     )
 }
+
+@Composable
+fun TopRoundedRectangle(width:Int, height:Int, color: Color = Color.LightGray) {
+    Box(
+        modifier = Modifier
+            .size(width.dp, height.dp)
+            .background(
+                color = color, // Set the color of the rectangle
+                shape = RoundedCornerShape(topStart = (height/2).dp, topEnd = (height/2).dp)
+            )
+    )
+}

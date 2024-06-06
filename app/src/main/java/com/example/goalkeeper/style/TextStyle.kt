@@ -29,4 +29,31 @@ object AppStyles {
         fontSize = 20.sp,
         color = Color.White
     )
+    val GroupNameStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.freesentation_regular)),
+        fontSize = 20.sp,
+        color = Color.Black,
+        fontWeight = FontWeight.ExtraBold
+    )
+    val TodoNameStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.freesentation_regular)),
+        fontSize = 20.sp,
+        color = Color.Black
+    )
+    val TodoMemoStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.freesentation_regular)),
+        fontSize = 15.sp,
+        color = Color.DarkGray
+    )
+    val TodoMenuTitleStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.freesentation_8extrabold)),
+        fontWeight = FontWeight.Bold,
+        fontSize = 40.sp,
+        color = Color.Black
+    )
+    val TodoMenuDateStyle = TextStyle(
+        fontFamily = FontFamily(Font(R.font.freesentation_regular)),
+        fontSize = 15.sp,
+        color = Color.Gray
+    )
 }
