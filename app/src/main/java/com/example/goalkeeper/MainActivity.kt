@@ -18,8 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.screen.MainScreen
-import com.example.goalkeeper.screen.RegisterScreen
-import com.example.goalkeeper.screen.WelcomeScreen
+import com.example.goalkeeper.screen.Login.RegisterScreen
+import com.example.goalkeeper.screen.Login.WelcomeScreen
 import com.example.goalkeeper.ui.theme.GoalKeeperTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen
+package com.example.goalkeeper.screen.MyPage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
