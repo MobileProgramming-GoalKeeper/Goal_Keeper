@@ -2,7 +2,7 @@ package com.example.goalkeeper.model
 
 data class UserRoutine(
     val routineNum: Int,
-    var userId: Int,
+    val userId: Int,
     var routineName: String,
     var routineAlart: Boolean
 )
