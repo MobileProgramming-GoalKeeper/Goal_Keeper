@@ -1,10 +1,12 @@
 package com.example.goalkeeper.model
 
 data class TodoGroup(
-    val groupNum: Int,
+    val groupId: Int,
     val userId: Int,
-    val groupName: String,
-    val mainTodo: List<Todo> = listOf()
+    var groupName: String,
+    var mainTodo: List<Todo> = listOf(),
+    var color: ToDoGroupColor = ToDoGroupColor.BLUE,
+    var icon: ToDoGroupIcon = ToDoGroupIcon.FAVORITE,
 )
 {
     constructor():this (0,0,"groupName")
