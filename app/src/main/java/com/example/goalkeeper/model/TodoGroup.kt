@@ -9,5 +9,5 @@ data class TodoGroup(
     var icon: String = ToDoGroupIcon.FAVORITE.toString(),
 )
 {
-    constructor():this (0,0,"groupName")
+    constructor():this (0, 0,"groupName")
 }

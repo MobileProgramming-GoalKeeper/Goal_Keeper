@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import java.time.LocalDate
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,6 +58,8 @@ fun HomeScreen() {
         contentAlignment = Alignment.Center
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+            //Calender()
+          
             ToDoGroupPrint(toDoGroup = exTodoGroup) { todo ->
                 navController.navigate("todoMenu/${todo.todoId}")
             }
@@ -96,4 +99,14 @@ fun HomeScreen() {
             }
         }
     }
+}
+
+
+@Composable
+fun Calender(modifier: Modifier = Modifier,
+             currentDate: LocalDate = LocalDate.now(),
+             //config: HorizontalCalendarConfig = HorizontalCalendarConfig(),
+             onSelectedDate: (LocalDate) -> Unit) {
+
+
 }
