@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen
+package com.example.goalkeeper.screen.MyPage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.component.GoalKeeperButton
+import com.example.goalkeeper.screen.MyPage.ColorPickerDialog
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
