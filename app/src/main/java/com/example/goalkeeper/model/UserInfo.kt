@@ -1,10 +1,14 @@
 package com.example.goalkeeper.model
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+
 data class UserInfo(
-    val userId: Int=0,
-    var userName: String,
+    val userId: String,
     var userPw: String,
-    var postponedNum: Int
+    var userName: String,
+    var themeColor1: Int = Color.Red.toArgb(),
+    var themeColor2: Int = Color.Blue.toArgb()
 ) {
-    constructor():this(0, "noName", "noPw", 0)
+    constructor():this("noId", "noPw", "noName")
 }

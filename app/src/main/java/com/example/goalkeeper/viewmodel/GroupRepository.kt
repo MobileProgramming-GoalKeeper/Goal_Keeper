@@ -1,6 +1,5 @@
 package com.example.goalkeeper.viewmodel
 
-import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.TodoGroup
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,15 +11,15 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class GroupRepository (private val grouptable : DatabaseReference) {
     suspend fun InsertGroup(todoGroup: TodoGroup){
-        grouptable.child(todoGroup.groupNum.toString()).setValue(todoGroup)
+        grouptable.child(todoGroup.groupId.toString()).setValue(todoGroup)
     }
 
     suspend fun DeleteGroup(todoGroup: TodoGroup){
-        grouptable.child(todoGroup.groupNum.toString()).removeValue()
+        grouptable.child(todoGroup.groupId.toString()).removeValue()
     }
     //그룹 이름 변경
     suspend fun UpdateGroupName(todoGroup: TodoGroup){
-        grouptable.child(todoGroup.groupNum.toString()).child("groupName").setValue(todoGroup.groupName)
+        grouptable.child(todoGroup.groupId.toString()).child("groupName").setValue(todoGroup.groupName)
     }
 
     fun getAllGroup(): Flow<List<TodoGroup>> = callbackFlow {

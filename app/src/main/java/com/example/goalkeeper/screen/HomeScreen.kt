@@ -3,11 +3,9 @@ package com.example.goalkeeper.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import java.time.LocalDate
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +18,7 @@ import com.example.goalkeeper.model.ToDoGroupIcon
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.TodoGroup
 import com.example.goalkeeper.model.toStringFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Composable
@@ -32,7 +31,7 @@ fun HomeScreen() {
         todoDate = LocalDateTime.of(2024, 6, 2, 0, 0).toStringFormat(),
         todoStartAt = LocalDateTime.of(2024, 6, 2, 9, 0).toStringFormat(),
         todoEndAt = LocalDateTime.of(2024, 6, 2, 10, 30).toStringFormat(),
-        todoAlart = false,
+        todoAlert = false,
         todoMemo = "사랑니 빼야됨 ㅜㅜ",
         todoDone = false
     )

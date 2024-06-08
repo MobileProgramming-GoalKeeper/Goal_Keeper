@@ -1,6 +1,7 @@
 package com.example.goalkeeper.viewmodel
 
 import com.example.goalkeeper.model.Todo
+import com.example.goalkeeper.model.UserInfo
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -11,40 +12,40 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class TodoRepository(private val todotable : DatabaseReference) {
 
-    suspend fun InsertTodo(todo : Todo){
-        todotable.child(todo.todoNum.toString()).setValue(todo)
+    suspend fun insertTodo(userInfo: UserInfo, todo : Todo){
+        todotable.child(todo.todoId.toString()).setValue(todo)
     }
 
-    suspend fun DeleteTodo(todo : Todo){
-        todotable.child(todo.todoNum.toString()).removeValue()
+    suspend fun deleteTodo(todo : Todo){
+        todotable.child(todo.todoId.toString()).removeValue()
     }
     //속한 그룹 변경
-    suspend fun UpdateTodoGroup(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("groupNum").setValue(todo.groupNum)
+    suspend fun updateTodoGroup(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("groupNum").setValue(todo.groupId)
     }
     //투두 이름 변경
-    suspend fun UpdateTodoName(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("todoName").setValue(todo.todoName)
+    suspend fun updateTodoName(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("todoName").setValue(todo.todoName)
     }
     //투두 날짜 변경
-    suspend fun UpdatetodoDate(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("todoDate").setValue(todo.todoDate)
+    suspend fun updatetodoDate(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("todoDate").setValue(todo.todoDate)
     }
     //투두 시간 변경
-    suspend fun UpdatetodoTime(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("todoTime").setValue(todo.todoTime)
+    fun updatetodoTime(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("todoTime").setValue(todo)
     }
     //투두 알림 여부 변경
-    suspend fun UpdatetodoAlart(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("todoAlart").setValue(todo.todoAlart)
+    fun updatetodoAlert(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("todoAlart").setValue(todo.todoAlert)
     }
     //투두 메모 내용 변경
-    suspend fun UpdatetodoMemo(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("todoMemo").setValue(todo.todoMemo)
+    fun updatetodoMemo(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("todoMemo").setValue(todo.todoMemo)
     }
     //투두 완료 여부 변경
-    suspend fun UpdatetodoDone(todo: Todo){
-        todotable.child(todo.todoNum.toString()).child("todoDone").setValue(todo.todoDone)
+    fun updatetodoDone(todo: Todo){
+        todotable.child(todo.todoId.toString()).child("todoDone").setValue(todo.todoDone)
     }
 
     //모든 투두 리스트로 가져옴.
@@ -72,6 +73,4 @@ class TodoRepository(private val todotable : DatabaseReference) {
             todotable.removeEventListener(listener)
         }
     }
-
-
 }
