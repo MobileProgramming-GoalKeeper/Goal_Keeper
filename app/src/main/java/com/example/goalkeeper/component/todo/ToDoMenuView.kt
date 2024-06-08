@@ -30,6 +30,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.component.EditableText
+import com.example.goalkeeper.model.MAX_TODO_MEMO
+import com.example.goalkeeper.model.MAX_TODO_NAME
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
@@ -90,6 +92,7 @@ fun TodoDetailView(
                     onTodoChange(updatedTodo)
                 },
                 style = AppStyles.TodoMenuTitleStyle,
+                maxLength = MAX_TODO_NAME
             )
             todo.todoStartAt?.let{
                 Text(
@@ -111,6 +114,7 @@ fun TodoDetailView(
                 },
                 style = AppStyles.TodoMemoStyle,
                 modifier = Modifier.size(350.dp, 100.dp),
+                maxLength = MAX_TODO_MEMO
             )
 
             TodoMenuRow("시간 알림", Icons.Filled.Notifications, {})

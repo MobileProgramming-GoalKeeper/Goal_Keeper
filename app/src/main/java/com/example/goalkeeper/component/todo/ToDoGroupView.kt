@@ -147,14 +147,16 @@ fun AddTodoDialog(
                         width = 300,
                         height = 60,
                         value = title,
-                        label = "할 일"
+                        label = "할 일",
+                        maxLength = MAX_TODO_NAME
                     ) { title = it }
                     Spacer(modifier = Modifier.height(16.dp))
                     GoalKeeperTextField(
                         width = 300,
                         height = 60,
                         value = memo,
-                        label = "메모"
+                        label = "메모",
+                        maxLength = MAX_TODO_MEMO
                     ) { memo = it }
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = { showDatePickerDialog = true  }) {

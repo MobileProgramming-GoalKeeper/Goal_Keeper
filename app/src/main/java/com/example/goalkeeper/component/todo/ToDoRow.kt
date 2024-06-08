@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.goalkeeper.model.MAX_TODO_MEMO_prev
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles.TodoMemoStyle
 import com.example.goalkeeper.style.AppStyles.TodoNameStyle
@@ -18,7 +19,7 @@ import com.example.goalkeeper.style.AppStyles.TodoNameStyle
 @Composable
 fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
     var name by remember { mutableStateOf(todo.todoName) }
-    var memo by remember { mutableStateOf(todo.todoMemo) }
+    var memo by remember { mutableStateOf(todo.todoMemo.take(MAX_TODO_MEMO_prev)) } //처음 30글자만
     var isDone by remember { mutableStateOf(todo.todoDone) }
 
     Row(

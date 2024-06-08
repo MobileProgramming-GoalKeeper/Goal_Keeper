@@ -16,7 +16,15 @@ import androidx.compose.ui.unit.dp
 import com.example.goalkeeper.style.AppStyles.loginTextStyle
 
 @Composable
-fun GoalKeeperTextField(width: Int, height: Int, color: Color = Color.LightGray, value: String, label: String, onValueChange: (String) -> Unit) {
+fun GoalKeeperTextField(
+    width: Int,
+    height: Int,
+    color: Color = Color.LightGray,
+    value: String,
+    label: String,
+    maxLength: Int = Int.MAX_VALUE,
+    onValueChange: (String) -> Unit,
+) {
     Box(
         modifier = Modifier
             .size(width = width.dp, height = height.dp)
@@ -27,10 +35,14 @@ fun GoalKeeperTextField(width: Int, height: Int, color: Color = Color.LightGray,
     ) {
         TextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = {
+                if (it.length <= maxLength) {
+                    onValueChange(it)
+                }
+            },
             label = { Text(text = label) },
             modifier = Modifier.fillMaxSize(),
-            colors =  textFieldColors(
+            colors = textFieldColors(
                 textColor = Color.White,
                 disabledTextColor = Color.White,
                 backgroundColor = color,
