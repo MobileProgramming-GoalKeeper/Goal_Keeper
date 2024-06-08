@@ -43,7 +43,7 @@ class TodoRepository(private val todotable: DatabaseReference) {
     }
 
     //투두 시간 변경
-    suspend fun UpdatetodoTime(todo: Todo, newStartAt: String, newEndAt: String) {
+    suspend fun UpdatetodoTime(todo: Todo, newStartAt: String?, newEndAt: String?) {
         todotable.child(todo.todoId.toString()).child("todoStartAt").setValue(newStartAt)
         todotable.child(todo.todoId.toString()).child("todoEndAt").setValue(newEndAt)
     }

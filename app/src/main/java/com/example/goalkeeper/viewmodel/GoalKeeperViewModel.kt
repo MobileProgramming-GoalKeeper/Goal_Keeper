@@ -200,6 +200,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             }
         }
         _todoList.value = updatedList!!
+        fetchTodos()
     }
 
     fun deleteTodoItem(todo: Todo) {
@@ -220,6 +221,17 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         viewModelScope.launch {
             todoRepository.UpdatePostPonedNum(todo)
             fetchTodos()
+        }
+    }
+
+    fun updateDateTodoItem(todo: Todo, newDate: String){
+        viewModelScope.launch {
+            todoRepository.UpdatetodoDate(todo, newDate)
+        }
+    }
+    fun updateTimeTodoItem(todo:Todo, newStartAt: String?, newEndAt:String?){
+        viewModelScope.launch {
+            todoRepository.UpdatetodoTime(todo, newStartAt, newEndAt)
         }
     }
 

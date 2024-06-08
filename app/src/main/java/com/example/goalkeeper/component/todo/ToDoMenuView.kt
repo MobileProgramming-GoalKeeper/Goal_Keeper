@@ -20,6 +20,10 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -121,7 +125,8 @@ fun TodoDetailView(
             TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward, {
                 viewModel.updatePostponeTodoItem(todo)
                 val newTodo = DoItTomorrow(todo)
-                viewModel.updateTodo(todo.todoId, newTodo)
+                viewModel.updateDateTodoItem(todo, newTodo.todoDate)
+                viewModel.updateTimeTodoItem(todo, newTodo.todoStartAt, newTodo.todoEndAt)
             })
             TodoMenuRow("날짜 바꾸기", Icons.Filled.DateRange, {})
             TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp, {})
