@@ -98,8 +98,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             }
         }
     }
-
-    suspend fun insertTodoItem(todo: Todo): String {
+    fun insertTodoItem(todo: Todo): String { //inserTodo 이걸로 사용해주세용
         viewModelScope.launch {
             val todoID = todoRepository.insertTodo(todo) ?: ""
             var group = groupRepository.findGroupById(todo.groupId)
@@ -125,8 +124,6 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             fetchGroups()
             return@launch
         }
-        _groupList.emit(_groupList.value + group)
-        fetchGroups()
         return groupID
     }
 
@@ -183,11 +180,11 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
 
     fun createMainTodoList(groupId: String): List<Todo> {
         var todoEX = Todo()
-        todoEX.groupId = groupId
-        todoEX.todoName = "치과가기"
-        todoEX.todoDate = LocalDateTime.of(2024, 6, 2, 0, 0).toStringFormat()
-        todoEX.todoStartAt = LocalDateTime.of(2024, 6, 2, 9, 0).toStringFormat()
-        todoEX.todoEndAt = LocalDateTime.of(2024, 6, 2, 10, 30).toStringFormat()
+        todoEX.groupId=groupId
+        todoEX.todoName="치과가기"
+        todoEX.todoDate= LocalDateTime.of(2024, 6, 2, 0, 0).toStringFormat(true)
+        todoEX.todoStartAt = LocalDateTime.of(2024, 6, 2, 9, 0).toStringFormat(true)
+        todoEX.todoEndAt = LocalDateTime.of(2024, 6, 2, 10, 30).toStringFormat(true)
         todoEX.todoMemo = "사랑니 빼야됨 ㅜㅜ"
 
         return listOf(

@@ -12,9 +12,9 @@ data class Todo (
     var todoStartAt: String?=null,
     var todoEndAt: String?=null,
 //    var todoTime: String,
-    var todoAlert: Boolean,
+    var todoAlert: Boolean=false,
     var todoMemo: String,
-    var todoDone: Boolean,
+    var todoDone: Boolean=false,
     val childTodo: List<Todo>? = listOf(),
     var postponedNum: Int=0,
 )

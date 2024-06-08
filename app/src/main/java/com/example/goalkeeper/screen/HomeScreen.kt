@@ -1,11 +1,13 @@
 package com.example.goalkeeper.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,9 +26,16 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreen() {
+
     val navController = rememberNavController()
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
+    //    테스트 데이터
+//    LaunchedEffect(Unit) {
+//        viewModel.setupTestData()
+//        Log.d("setup","set up Test Data.")
+//    }
 
     val groupListState by viewModel.groupList.collectAsState()
     val itemListState by viewModel.todoList.collectAsState()
