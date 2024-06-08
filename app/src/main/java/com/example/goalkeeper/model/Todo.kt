@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter
 
 
 data class Todo (
-    val todoId: Int=0,
-    var groupId: Int,
+    var todoId: String,
+    var groupId: String,
     var todoName: String,
     var todoDate: String,
     var todoStartAt: String?=null,
@@ -20,7 +20,7 @@ data class Todo (
     var postponedNum: Int=0,
 )
 {
-    constructor():this(0,0,"todoName", "2024년 06월 13일",null,null,false,"memo",false,null, 0)
+    constructor():this("0","0","todoName", "2024년 06월 13일",null,null,false,"memo",false,null, 0)
     fun formatDateTime(dateTime: LocalDateTime?, displayTime: Boolean): String {
         return if(displayTime) {
             dateTime?.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm")) ?: ""

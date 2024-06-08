@@ -29,11 +29,13 @@ import androidx.navigation.NavController
 import com.example.goalkeeper.component.EditableText
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
 fun TodoDetailView(
     todo: Todo,
     navController: NavController,
+    viewModel: GoalKeeperViewModel,
     onTodoChange: (Todo) -> Unit
 ) {
     Column(

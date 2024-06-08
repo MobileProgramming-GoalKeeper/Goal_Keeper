@@ -57,8 +57,8 @@ fun StatisticsScreen(navController: NavHostController) {
         for (i in 1..n)
             viewModel.insertTodo(
                 Todo(
-                    todoId = i,
-                    groupId = 1,
+                    todoId = i.toString(),
+                    groupId = "1",
                     todoName = "" + i,
                     todoDate = LocalDateTime.of(2024, 6, 2, 0, 0).toStringFormat(),
                     todoStartAt = LocalDateTime.of(2024, 6, 2, 9, 0).toStringFormat(),
