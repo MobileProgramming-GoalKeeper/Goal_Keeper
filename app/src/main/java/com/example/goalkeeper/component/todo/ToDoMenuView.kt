@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsProperties.EditableText
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,6 +41,7 @@ fun TodoDetailView(
     viewModel: GoalKeeperViewModel,
     onTodoChange: (Todo) -> Unit
 ) {
+    val context = LocalContext.current
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
@@ -70,6 +72,9 @@ fun TodoDetailView(
                 modifier = Modifier
                     .size(60.dp)
                     .padding(10.dp)
+                    .clickable {
+                        copyToClipboard(context, todo)
+                    }
             )
         }
         Column(
@@ -109,7 +114,9 @@ fun TodoDetailView(
             )
 
             TodoMenuRow("시간 알림", Icons.Filled.Notifications, {})
-            TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward, {})
+            TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward, {
+
+            })
             TodoMenuRow("날짜 바꾸기", Icons.Filled.DateRange, {})
             TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp, {})
             TodoMenuRow("삭제하기", Icons.Filled.Delete, {
