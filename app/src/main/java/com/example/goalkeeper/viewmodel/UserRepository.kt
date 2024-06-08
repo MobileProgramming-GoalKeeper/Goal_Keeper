@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class UserRepository(private val usertable: DatabaseReference) {
 
-    fun InsertUser(userInfo: UserInfo) {
+    fun insertUser(userInfo: UserInfo) {
         usertable.child(userInfo.userId).setValue(userInfo)
     }
 
@@ -27,7 +27,7 @@ class UserRepository(private val usertable: DatabaseReference) {
     }
 
     fun insertTodo(userInfo: UserInfo, todo: Todo) {
-        usertable.child(userInfo.userId).child("todo").child(todo.todoName).setValue(todo)
+        usertable.child(userInfo.userId).child("todos").child(todo.todoName).setValue(todo)
     }
 
     //UserInfo 나머지 정보는 update 될 일 없을 것 같아 추가하지 않았습니다. +delete도 없습니다!
@@ -58,7 +58,7 @@ class UserRepository(private val usertable: DatabaseReference) {
     }
 
     fun getUsersTodo(userInfo: UserInfo): Flow<List<Todo>> = callbackFlow {
-        val query = usertable.child(userInfo.userId).child("todo")
+        val query = usertable.child(userInfo.userId).child("todos")
 
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

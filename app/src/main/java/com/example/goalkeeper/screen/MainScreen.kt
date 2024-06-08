@@ -22,7 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.R
 import com.example.goalkeeper.nav.BottomNavItem
 import com.example.goalkeeper.nav.Routes
-import com.example.goalkeeper.screen.myPage.MyPageScreen
 import com.example.goalkeeper.style.AppStyles.engTitleStyle
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 

@@ -10,20 +10,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class RoutineRepository (private val routinetable : DatabaseReference) {
-    suspend fun InsertRoutine(userRoutine: UserRoutine){
-        routinetable.child(userRoutine.routineNum.toString()).setValue(userRoutine)
+    fun insertRoutine(userRoutine: UserRoutine){
+        routinetable.child(userRoutine.routineName).setValue(userRoutine)
     }
 
     suspend fun DeleteRoutine(userRoutine: UserRoutine){
-        routinetable.child(userRoutine.routineNum.toString()).removeValue()
+        routinetable.child(userRoutine.routineName).removeValue()
     }
     //루틴 이름 변경
     suspend fun UpdateroutineName(userRoutine: UserRoutine){
-        routinetable.child(userRoutine.routineNum.toString()).child("routineName").setValue(userRoutine.routineName)
+        routinetable.child(userRoutine.routineName).setValue(userRoutine.routineName)
     }
     //알림 여부 변경
     suspend fun UpdateroutineAlert(userRoutine: UserRoutine){
-        routinetable.child(userRoutine.routineNum.toString()).child("routineAlart").setValue(userRoutine.routineAlert)
+        routinetable.child(userRoutine.routineName).child("routineAlert").setValue(userRoutine.routineAlert)
     }
 
     fun getAllRoutine(): Flow<List<UserRoutine>> = callbackFlow {
