@@ -48,7 +48,6 @@ import java.time.LocalDateTime
 @Composable
 fun ToDoGroupPrint(
     toDoGroup: TodoGroup,
-    viewModel: GoalKeeperViewModel,
     onMenuIconClick: (Todo) -> Unit,
 ) {
     val viewModel: GoalKeeperViewModel =

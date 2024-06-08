@@ -49,7 +49,7 @@ fun HomeScreen() {
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(groupListState) { todoGroup ->
-                    ToDoGroupPrint(toDoGroup = todoGroup, viewModel) { todo ->
+                    ToDoGroupPrint(toDoGroup = todoGroup) { todo ->
                         // TodoDetailView로 이동
                         navController.navigate("todoMenu/${todo.todoId}")
                     }
@@ -75,7 +75,6 @@ fun HomeScreen() {
                             TodoDetailView(
                                 todo = todo,
                                 navController = navController,
-                                viewModel = viewModel
                             ) { newTodo ->
                                 viewModel.updateTodo(todoId, newTodo)
                             }
