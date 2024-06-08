@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen.MyPage
+package com.example.goalkeeper.screen.myPage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +24,9 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.nav.Routes
+import com.example.goalkeeper.screen.RoutineScreen
+import com.example.goalkeeper.screen.StatisticsScreen
+import com.example.goalkeeper.screen.ThemeColorScreen
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
@@ -33,6 +36,8 @@ fun MyPageScreen() {
 
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
+    val user = viewModel.user.value!!
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -47,7 +52,7 @@ fun MyPageScreen() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = viewModel.userID,
+                        text = user.userName,
                         fontSize = 40.sp,
                         modifier = Modifier.padding(20.dp),
                         style = TextStyle(

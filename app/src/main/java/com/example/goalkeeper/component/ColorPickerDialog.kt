@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen.MyPage
+package com.example.goalkeeper.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -33,9 +33,9 @@ fun ColorPickerDialog(
 ) {
     val hsv = colorToHsv(initialColor)
 
-    var hue by remember { mutableStateOf(hsv[0]) }
-    var saturation by remember { mutableStateOf(hsv[1]) }
-    var value by remember { mutableStateOf(hsv[2]) }
+    var hue by remember { mutableFloatStateOf(hsv[0]) }
+    var saturation by remember { mutableFloatStateOf(hsv[1]) }
+    var value by remember { mutableFloatStateOf(hsv[2]) }
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
@@ -88,18 +88,17 @@ fun colorToHsv(color: Color): List<Float> {
     val max = max(r, max(g, b))
     val min = min(r, min(g, b))
     val delta = max - min
-    val v = max
 
     val s: Float = if (max == 0f) 0f else delta / max
 
-    val h: Float = when {
-        max == min -> 0f
-        max == r -> (60 * ((g - b) / delta) + 360) % 360
-        max == g -> (60 * ((b - r) / delta) + 120) % 360
+    val h: Float = when (max) {
+        min -> 0f
+        r -> (60 * ((g - b) / delta) + 360) % 360
+        g -> (60 * ((b - r) / delta) + 120) % 360
         else -> (60 * ((r - g) / delta) + 240) % 360
     }
 
-    return listOf(h, s, v)
+    return listOf(h, s, max)
 }
 
 fun hsvToColor(hue: Float, saturation: Float, value: Float): Color {

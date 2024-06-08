@@ -1,6 +1,5 @@
 package com.example.goalkeeper.viewmodel
 
-import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.UserRoutine
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,8 +22,8 @@ class RoutineRepository (private val routinetable : DatabaseReference) {
         routinetable.child(userRoutine.routineNum.toString()).child("routineName").setValue(userRoutine.routineName)
     }
     //알림 여부 변경
-    suspend fun UpdateroutineAlart(userRoutine: UserRoutine){
-        routinetable.child(userRoutine.routineNum.toString()).child("routineAlart").setValue(userRoutine.routineAlart)
+    suspend fun UpdateroutineAlert(userRoutine: UserRoutine){
+        routinetable.child(userRoutine.routineNum.toString()).child("routineAlart").setValue(userRoutine.routineAlert)
     }
 
     fun getAllRoutine(): Flow<List<UserRoutine>> = callbackFlow {

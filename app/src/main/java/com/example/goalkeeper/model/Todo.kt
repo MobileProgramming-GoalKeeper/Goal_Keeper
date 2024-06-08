@@ -12,13 +12,15 @@ data class Todo (
     var todoStartAt: String?=null,
     var todoEndAt: String?=null,
 //    var todoTime: String,
-    var todoAlart: Boolean,
+    var todoAlert: Boolean,
     var todoMemo: String,
     var todoDone: Boolean,
-    val childTodo: List<Todo>? = listOf()
+    val childTodo: List<Todo>? = listOf(),
+
+    var postponedNum: Int=0,
 )
 {
-    constructor():this(0,0,"todoName", "2024년 06월 13일",null,null,false,"memo",false,null)
+    constructor():this(0,0,"todoName", "2024년 06월 13일",null,null,false,"memo",false,null, 0)
     fun formatDateTime(dateTime: LocalDateTime?, displayTime: Boolean): String {
         return if(displayTime) {
             dateTime?.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm")) ?: ""

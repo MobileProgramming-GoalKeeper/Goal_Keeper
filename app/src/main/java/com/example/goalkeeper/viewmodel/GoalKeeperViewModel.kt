@@ -1,23 +1,45 @@
 package com.example.goalkeeper.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.TodoGroup
 import com.example.goalkeeper.model.UserInfo
 import com.example.goalkeeper.model.UserRoutine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class GoalKeeperViewModel(
-    private val grouprepository: GroupRepository,
+class GoalKeeperViewModelFactory(
+    private val groupRepository: GroupRepository,
     private val routineRepository: RoutineRepository,
     private val todoRepository: TodoRepository,
-    private val userRepository: UserRepository ): ViewModel() {
+    private val userRepository: UserRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(GoalKeeperViewModel::class.java)) {
+            return GoalKeeperViewModel(
+                groupRepository,
+                routineRepository,
+                todoRepository,
+                userRepository
+            ) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class GoalKeeperViewModel(
+    private val groupRepository: GroupRepository,
+    private val routineRepository: RoutineRepository,
+    private val todoRepository: TodoRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
 
     private var _todoList = MutableStateFlow<List<Todo>>(emptyList())
-    val itemList = _todoList.asStateFlow()
+    val todoList = _todoList.asStateFlow()
     private var _userList = MutableStateFlow<List<UserInfo>>(emptyList())
     val userList = _userList.asStateFlow()
     private var _groupList = MutableStateFlow<List<TodoGroup>>(emptyList())
@@ -25,20 +47,37 @@ class GoalKeeperViewModel(
     private var _routineList = MutableStateFlow<List<UserRoutine>>(emptyList())
     val routineList = _routineList.asStateFlow()
 
+    var user = mutableStateOf<UserInfo?>(null)
 
-        val userID = "user"
-    //    val userPassword = "1234"
-
-        var themeColor1 = mutableStateOf(Color.Red)
-        var themeColor2 = mutableStateOf(Color.Green)
-
-        fun login(userID: String, userPassword: String): Boolean {
-    //        return this.userID == userID && this.userPassword == userPassword
-            return true
+    fun login(userID: String, userPassword: String) {
+        viewModelScope.launch {
+            userRepository.getAllUser().collect {
+                user.value = it.firstOrNull { it.userId == userID && it.userPw == userPassword }
+            }
         }
-
-        fun register(userID: String, userPassword: String): Boolean {
-            return true
-        }
-
     }
+
+    fun register(userId: String, userPassword: String, userName: String) {
+        userRepository.InsertUser(UserInfo(userId, userPassword, userName))
+    }
+
+    fun updateThemeColor1() {
+        userRepository.updateThemeColor1(user.value!!)
+    }
+
+    fun updateThemeColor2() {
+        userRepository.updateThemeColor2(user.value!!)
+    }
+
+    fun insertTodo(todo: Todo) {
+        userRepository.insertTodo(user.value!!, todo)
+    }
+
+    fun loadTodoList(userInfo: UserInfo) {
+        viewModelScope.launch {
+            userRepository.getUsersTodo(userInfo).collect {
+                _todoList.value = it
+            }
+        }
+    }
+}

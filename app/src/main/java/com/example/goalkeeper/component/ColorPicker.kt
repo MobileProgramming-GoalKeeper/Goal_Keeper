@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen.MyPage
+package com.example.goalkeeper.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

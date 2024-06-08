@@ -13,14 +13,23 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.nav.Routes
+import com.example.goalkeeper.screen.login.RegisterScreen
+import com.example.goalkeeper.screen.login.WelcomeScreen
 import com.example.goalkeeper.screen.MainScreen
-import com.example.goalkeeper.screen.Login.RegisterScreen
-import com.example.goalkeeper.screen.Login.WelcomeScreen
 import com.example.goalkeeper.ui.theme.GoalKeeperTheme
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModelFactory
+import com.example.goalkeeper.viewmodel.GroupRepository
+import com.example.goalkeeper.viewmodel.RoutineRepository
+import com.example.goalkeeper.viewmodel.TodoRepository
+import com.example.goalkeeper.viewmodel.UserRepository
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +64,15 @@ fun MyApp() {
     val navController = rememberNavController()
     val navStoreOwner = rememberViewModelStoreOwner()
 
+    val goalKeeperDB = Firebase.database.getReference("goalkeeper")
+
+    val viewModel: GoalKeeperViewModel = viewModel(factory = GoalKeeperViewModelFactory(
+        GroupRepository(goalKeeperDB.child("groups")),
+        RoutineRepository(goalKeeperDB.child("routines")),
+        TodoRepository(goalKeeperDB.child("todos")),
+        UserRepository(goalKeeperDB.child("users"))
+    ))
+
     CompositionLocalProvider(
         LocalNavGraphViewModelStoreOwner provides navStoreOwner
     ) {
@@ -64,5 +82,4 @@ fun MyApp() {
             composable(Routes.Register.route) { RegisterScreen(navController) }
         }
     }
-
 }
