@@ -63,10 +63,6 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         userRepository.updateThemeColor2(user.value!!)
     }
 
-    fun insertTodo(todo: Todo) {
-        userRepository.insertTodo(user.value!!, todo)
-    }
-
     fun loadTodoList(userInfo: UserInfo) {
         viewModelScope.launch {
             userRepository.getUsersTodo(userInfo).collect {
@@ -206,6 +202,12 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         _todoList.value = updatedList!!
     }
 
+    fun deleteTodoItem(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.deleteTodo(todo)
+            fetchTodos()
+        }
+    }
     fun initRepositories(userInfo: UserInfo) {
         todoRepository =
             TodoRepository(dbReference.child("users").child(userInfo.userId).child("todos"))

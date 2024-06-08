@@ -25,7 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.SemanticsProperties.EditableText
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.component.EditableText
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles
@@ -38,6 +40,9 @@ fun TodoDetailView(
     viewModel: GoalKeeperViewModel,
     onTodoChange: (Todo) -> Unit
 ) {
+    val viewModel: GoalKeeperViewModel =
+        viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -107,7 +112,10 @@ fun TodoDetailView(
             TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward, {})
             TodoMenuRow("날짜 바꾸기", Icons.Filled.DateRange, {})
             TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp, {})
-            TodoMenuRow("삭제하기", Icons.Filled.Delete, {})
+            TodoMenuRow("삭제하기", Icons.Filled.Delete, {
+                viewModel.deleteTodoItem(todo)
+                navController.popBackStack()
+            })
         }
     }
 }
