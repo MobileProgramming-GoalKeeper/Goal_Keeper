@@ -39,7 +39,13 @@ fun WelcomeScreen(navController: NavHostController) {
     var userPassword by remember { mutableStateOf("") }
 
     LaunchedEffect(viewModel.user.value) {
-        if(viewModel.user.value != null) {
+        if (viewModel.user.value != null) {
+            viewModel.initRepositories(viewModel.user.value!!)
+
+//            테스트 데이터 추가
+//            viewModel.setupTestData()
+            viewModel.fetchTodos()
+            viewModel.fetchGroups()
             navController.navigate(Routes.Main.route)
         }
     }

@@ -10,4 +10,5 @@ sealed class Routes (val route: String) {
     object Statistics: Routes("Statistics")
     object Routine: Routes("Routine")
     object ThemeColor: Routes("ThemColor")
+    object Group: Routes("Group")
 }

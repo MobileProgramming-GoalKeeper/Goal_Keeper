@@ -11,42 +11,31 @@ import com.example.goalkeeper.model.TodoGroup
 import com.example.goalkeeper.model.UserInfo
 import com.example.goalkeeper.model.UserRoutine
 import com.example.goalkeeper.model.toStringFormat
+import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class GoalKeeperViewModelFactory(
-    private val groupRepository: GroupRepository,
-    private val routineRepository: RoutineRepository,
-    private val todoRepository: TodoRepository,
-    private val userRepository: UserRepository
+    private val dbReference: DatabaseReference,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GoalKeeperViewModel::class.java)) {
-            return GoalKeeperViewModel(
-                groupRepository,
-                routineRepository,
-                todoRepository,
-                userRepository
-            ) as T
+            return GoalKeeperViewModel(dbReference) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-class GoalKeeperViewModel(
-    private val groupRepository: GroupRepository,
-    private val routineRepository: RoutineRepository,
-    private val todoRepository: TodoRepository,
-    private val userRepository: UserRepository
-) : ViewModel() {
+class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewModel() {
+    private val userRepository: UserRepository = UserRepository(dbReference.child("users"))
+    private lateinit var groupRepository: GroupRepository
+    private lateinit var routineRepository: RoutineRepository
+    private lateinit var todoRepository: TodoRepository
 
     private var _todoList = MutableStateFlow<List<Todo>>(emptyList())
     val todoList = _todoList.asStateFlow()
-    private var _userList = MutableStateFlow<List<UserInfo>>(emptyList())
-    val userList = _userList.asStateFlow()
     private var _groupList = MutableStateFlow<List<TodoGroup>>(emptyList())
     val groupList = _groupList.asStateFlow()
     private var _routineList = MutableStateFlow<List<UserRoutine>>(emptyList())
@@ -63,7 +52,7 @@ class GoalKeeperViewModel(
     }
 
     fun register(userId: String, userPassword: String, userName: String) {
-        userRepository.InsertUser(UserInfo(userId, userPassword, userName))
+        userRepository.insertUser(UserInfo(userId, userPassword, userName))
     }
 
     fun updateThemeColor1() {
@@ -85,11 +74,16 @@ class GoalKeeperViewModel(
             }
         }
     }
-    init {
-        fetchTodos()
-        fetchGroups()
+
+    fun insertGroup(group: TodoGroup) {
+        groupRepository.insertGroup(group)
     }
-    private fun fetchTodos() {
+
+    fun insertRoutine(routine: UserRoutine) {
+        routineRepository.insertRoutine(routine)
+    }
+
+    fun fetchTodos() {
         viewModelScope.launch {
             todoRepository.getAllTodo().collect { todos ->
                 _todoList.value = todos
@@ -97,14 +91,14 @@ class GoalKeeperViewModel(
         }
     }
 
-    private fun fetchGroups() {
+    fun fetchGroups() {
         viewModelScope.launch {
             groupRepository.getAllGroup().collect { groups ->
                 _groupList.value = groups
             }
         }
     }
-    fun insertTodoItem(todo: Todo) :String{
+    fun insertTodoItem(todo: Todo): String { //inserTodo 이걸로 사용해주세용
         viewModelScope.launch {
             val todoID = todoRepository.insertTodo(todo) ?: ""
             var group = groupRepository.findGroupById(todo.groupId)
@@ -157,7 +151,6 @@ class GoalKeeperViewModel(
 
         val exTodoGroup = TodoGroup(
             groupId = "1",
-            userId = 1,
             groupName = "공부",
             color = ToDoGroupColor.RED.toString(),
             icon = ToDoGroupIcon.PENCIL.toString()
@@ -172,7 +165,6 @@ class GoalKeeperViewModel(
 
         val exTodoGroup2 = TodoGroup(
             groupId = "2",
-            userId = 1,
             groupName = "위시리스트",
             color = ToDoGroupColor.PINK.toString(),
             icon = ToDoGroupIcon.SHOPPING_CART.toString()
@@ -183,9 +175,9 @@ class GoalKeeperViewModel(
                 todo.copy(todoId = (index + 5).toString())
             }
             mainTodo.forEach { todo -> insertTodoItem(todo) }
-
         }
     }
+
     fun createMainTodoList(groupId: String): List<Todo> {
         var todoEX = Todo()
         todoEX.groupId=groupId
@@ -197,7 +189,7 @@ class GoalKeeperViewModel(
 
         return listOf(
             todoEX.copy(todoId = "1", groupId = groupId),
-            todoEX.copy(todoId = "2", groupId = groupId,  todoName = "병원가기", todoMemo = "감기약 타오기"),
+            todoEX.copy(todoId = "2", groupId = groupId, todoName = "병원가기", todoMemo = "감기약 타오기"),
             todoEX.copy(todoId = "3", groupId = groupId, todoName = "약속 잡기", todoMemo = "친구 만나기"),
             todoEX.copy(todoId = "4", groupId = groupId, todoName = "운동하기", todoMemo = "헬스장 가기")
         )
@@ -207,9 +199,19 @@ class GoalKeeperViewModel(
         val updatedList = todoList.value?.map { todo ->
             if (todo.todoId == todoId) {
                 newTodo
-            }else{ todo}
+            } else {
+                todo
+            }
         }
         _todoList.value = updatedList!!
     }
 
+    fun initRepositories(userInfo: UserInfo) {
+        todoRepository =
+            TodoRepository(dbReference.child("users").child(userInfo.userId).child("todos"))
+        groupRepository =
+            GroupRepository(dbReference.child("users").child(userInfo.userId).child("groups"))
+        routineRepository =
+            RoutineRepository(dbReference.child("users").child(userInfo.userId).child("routines"))
+    }
 }

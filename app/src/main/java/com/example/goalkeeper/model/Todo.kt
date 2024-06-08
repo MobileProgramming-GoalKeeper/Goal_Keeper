@@ -16,7 +16,6 @@ data class Todo (
     var todoMemo: String,
     var todoDone: Boolean=false,
     val childTodo: List<Todo>? = listOf(),
-
     var postponedNum: Int=0,
 )
 {

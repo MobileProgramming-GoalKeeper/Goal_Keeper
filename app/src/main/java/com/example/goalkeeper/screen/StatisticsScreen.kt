@@ -35,11 +35,9 @@ import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.component.PieChart
 import com.example.goalkeeper.component.PieChartData
 import com.example.goalkeeper.model.Todo
-import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 import kotlinx.coroutines.delay
-import java.time.LocalDateTime
 
 @Composable
 fun StatisticsScreen(navController: NavHostController) {
@@ -52,24 +50,6 @@ fun StatisticsScreen(navController: NavHostController) {
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-//        userInfo 아래에 할 일 추가
-        val n = 7
-        for (i in 1..n)
-            viewModel.insertTodo(
-                Todo(
-                    todoId = i.toString(),
-                    groupId = "1",
-                    todoName = "" + i,
-                    todoDate = LocalDateTime.of(2024, 6, 2, 0, 0).toStringFormat(true),
-                    todoStartAt = LocalDateTime.of(2024, 6, 2, 9, 0).toStringFormat(true),
-                    todoEndAt = LocalDateTime.of(2024, 6, 2, 10, 30).toStringFormat(true),
-                    todoAlert = false,
-                    todoMemo = "사랑니 빼야됨 ㅜㅜ",
-                    todoDone = false,
-                    postponedNum = i
-                )
-            )
-
         viewModel.loadTodoList(viewModel.user.value!!)
         delay(1000)
         isLoading = false
@@ -111,8 +91,14 @@ fun StatisticsScreen(navController: NavHostController) {
                     centerText = "할 일 미룬 횟수: $totalPostponed 회"
                 )
             }
-
-            PieChartList(itemList = dataList)
+            if(totalPostponed > 0)
+                PieChartList(itemList = dataList)
+            else {
+                Text(
+                    text = "미룬 일이 없습니다",
+                    fontSize = 24.sp
+                )
+            }
 
             GoalKeeperButton(
                 width = 200,
@@ -135,7 +121,8 @@ fun PieChartList(itemList: List<PieChartData>) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(itemList) { item ->
-            PieChartDataItem(item)
+            if(item.value > 0)
+                PieChartDataItem(item)
         }
     }
 }

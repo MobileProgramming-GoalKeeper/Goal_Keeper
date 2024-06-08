@@ -1,7 +1,6 @@
 package com.example.goalkeeper
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -26,10 +24,6 @@ import com.example.goalkeeper.screen.WelcomeScreen
 import com.example.goalkeeper.ui.theme.GoalKeeperTheme
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModelFactory
-import com.example.goalkeeper.viewmodel.GroupRepository
-import com.example.goalkeeper.viewmodel.RoutineRepository
-import com.example.goalkeeper.viewmodel.TodoRepository
-import com.example.goalkeeper.viewmodel.UserRepository
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 
@@ -68,18 +62,8 @@ fun MyApp() {
 
     val goalKeeperDB = Firebase.database.getReference("goalkeeper")
 
-    val viewModel: GoalKeeperViewModel = viewModel(factory = GoalKeeperViewModelFactory(
-        GroupRepository(goalKeeperDB.child("groups")),
-        RoutineRepository(goalKeeperDB.child("routines")),
-        TodoRepository(goalKeeperDB.child("todos")),
-        UserRepository(goalKeeperDB.child("users"))
-    ))
+    val viewModel: GoalKeeperViewModel = viewModel(factory = GoalKeeperViewModelFactory(goalKeeperDB))
 
-    //테스트 데이터
-//    LaunchedEffect(Unit) {
-//        viewModel.setupTestData()
-//        Log.d("setup","set up Test Data.")
-//    }
     CompositionLocalProvider(
         LocalNavGraphViewModelStoreOwner provides navStoreOwner
     ) {
