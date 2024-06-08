@@ -151,6 +151,7 @@ fun ChangeDate(
             dismissButton = {
                 TextButton(
                     onClick = {
+                        onDateSelected(selectedDateTime.toStringFormat(false))
                         showTimePicker = false
 //                        timeInfo = false
                         onDismissRequest()
