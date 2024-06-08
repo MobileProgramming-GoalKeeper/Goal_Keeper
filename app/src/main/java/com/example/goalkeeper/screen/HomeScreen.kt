@@ -54,38 +54,38 @@ fun HomeScreen() {
                     }
                 }
             }
-            NavHost(
-                navController = navController,
-                startDestination = "todoMenu/{todoId}",
-                modifier = Modifier.fillMaxSize()
-            ) {
-                composable(
-                    route = "todoMenu/{todoId}",
-                    arguments = listOf(navArgument("todoId") { type = NavType.StringType })
-                ) { backStackEntry ->
-                    val todoId = backStackEntry.arguments?.getString("todoId")
-                    if (todoId != null) {
-                        itemListState.forEach { todo ->
 
-                            val todo = itemListState.find { it.todoId == todoId }
-                            if (todo != null) {
-                                TodoDetailView(
-                                    todo = todo,
-                                    navController = navController,
-                                    viewModel = viewModel
-                                ){
-                                        newTodo->viewModel.updateTodo(todoId, newTodo)
-                                }
+        }
+        NavHost(
+            navController = navController,
+            startDestination = "todoMenu/{todoId}",
+            modifier = Modifier.fillMaxSize()
+        ) {
+            composable(
+                route = "todoMenu/{todoId}",
+                arguments = listOf(navArgument("todoId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val todoId = backStackEntry.arguments?.getString("todoId")
+                if (todoId != null) {
+                    itemListState.forEach { todo ->
+
+                        val todo = itemListState.find { it.todoId == todoId }
+                        if (todo != null) {
+                            TodoDetailView(
+                                todo = todo,
+                                navController = navController,
+                                viewModel = viewModel
+                            ) { newTodo ->
+                                viewModel.updateTodo(todoId, newTodo)
                             }
-                            return@composable
                         }
+                        return@composable
                     }
                 }
             }
         }
     }
 }
-
 
 
 @Composable
