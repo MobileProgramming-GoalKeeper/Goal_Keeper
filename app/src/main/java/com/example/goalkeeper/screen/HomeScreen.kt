@@ -32,10 +32,10 @@ fun HomeScreen() {
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
     //    테스트 데이터
-    LaunchedEffect(Unit) {
-        viewModel.setupTestData()
-        Log.d("setup","set up Test Data.")
-    }
+//    LaunchedEffect(Unit) {
+//        viewModel.setupTestData()
+//        Log.d("setup","set up Test Data.")
+//    }
 
     val groupListState by viewModel.groupList.collectAsState()
     val itemListState by viewModel.todoList.collectAsState()
