@@ -119,7 +119,9 @@ fun TodoDetailView(
 
             TodoMenuRow("시간 알림", Icons.Filled.Notifications, {})
             TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward, {
-
+                viewModel.updatePostponeTodoItem(todo)
+                val newTodo = DoItTomorrow(todo)
+                viewModel.updateTodo(todo.todoId, newTodo)
             })
             TodoMenuRow("날짜 바꾸기", Icons.Filled.DateRange, {})
             TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp, {})

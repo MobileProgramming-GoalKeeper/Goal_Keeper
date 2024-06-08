@@ -204,10 +204,25 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
 
     fun deleteTodoItem(todo: Todo) {
         viewModelScope.launch {
+            var group = groupRepository.findGroupById(todo.groupId)
+            if(group!=null){
+                group.mainTodo.remove(todo)
+                groupRepository.updateGroup(group)
+            }
             todoRepository.deleteTodo(todo)
+
+            fetchTodos()
+            fetchGroups()
+        }
+    }
+
+    fun updatePostponeTodoItem(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.UpdatePostPonedNum(todo)
             fetchTodos()
         }
     }
+
     fun initRepositories(userInfo: UserInfo) {
         todoRepository =
             TodoRepository(dbReference.child("users").child(userInfo.userId).child("todos"))

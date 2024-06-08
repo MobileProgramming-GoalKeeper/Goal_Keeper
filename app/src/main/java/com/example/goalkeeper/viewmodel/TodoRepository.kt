@@ -63,6 +63,10 @@ class TodoRepository(private val todotable: DatabaseReference) {
         todotable.child(todo.todoId.toString()).child("todoDone").setValue(todo.todoDone)
     }
 
+    suspend fun UpdatePostPonedNum(todo: Todo) {
+        todotable.child(todo.todoId.toString()).child("postponedNum").setValue(todo.postponedNum+1)
+    }
+
     //모든 투두 리스트로 가져옴.
     //혹시 그룹별로 가져오는 기능 등 추가 함수 필요하면 말씀해주시면 추가하겠습니다 !
     fun getAllTodo(): Flow<List<Todo>> = callbackFlow {
