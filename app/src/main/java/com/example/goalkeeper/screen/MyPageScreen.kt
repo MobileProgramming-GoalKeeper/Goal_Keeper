@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen.myPage
+package com.example.goalkeeper.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,9 +24,6 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
 import com.example.goalkeeper.nav.Routes
-import com.example.goalkeeper.screen.RoutineScreen
-import com.example.goalkeeper.screen.StatisticsScreen
-import com.example.goalkeeper.screen.ThemeColorScreen
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
@@ -71,15 +68,7 @@ fun MyPageScreen() {
                     ) {
                         navController.navigate(Routes.Statistics.route)
                     }
-                    Spacer(modifier = Modifier.padding(15.dp))
-                    GoalKeeperButton(
-                        width = 300,
-                        height = 60,
-                        text = "루틴",
-                        textStyle = korTitleStyle
-                    ) {
-                        navController.navigate(Routes.Routine.route)
-                    }
+
                     Spacer(modifier = Modifier.padding(15.dp))
                     GoalKeeperButton(
                         width = 300,
@@ -89,11 +78,32 @@ fun MyPageScreen() {
                     ) {
                         navController.navigate(Routes.ThemeColor.route)
                     }
+
+                    Spacer(modifier = Modifier.padding(15.dp))
+                    GoalKeeperButton(
+                        width = 300,
+                        height = 60,
+                        text = "루틴 설정",
+                        textStyle = korTitleStyle
+                    ) {
+                        navController.navigate(Routes.Routine.route)
+                    }
+
+                    Spacer(modifier = Modifier.padding(15.dp))
+                    GoalKeeperButton(
+                        width = 300,
+                        height = 60,
+                        text = "그룹 설정",
+                        textStyle = korTitleStyle
+                    ) {
+                        navController.navigate(Routes.Group.route)
+                    }
                 }
             }
             composable(Routes.Statistics.route) { StatisticsScreen(navController) }
             composable(Routes.Routine.route) { RoutineScreen(navController) }
             composable(Routes.ThemeColor.route) { ThemeColorScreen(navController) }
+            composable(Routes.Group.route) { GroupScreen(navController) }
         }
     }
 }

@@ -14,12 +14,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.component.GoalKeeperButton
-import com.example.goalkeeper.model.UserRoutine
-import com.example.goalkeeper.style.AppStyles.korTitleStyle
+import com.example.goalkeeper.model.TodoGroup
+import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
-fun RoutineScreen(navController: NavHostController) {
+fun GroupScreen(navController: NavHostController) {
 
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
@@ -29,22 +29,22 @@ fun RoutineScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Routine Screen")
+        Text(text = "Group Setting Screen")
 
         GoalKeeperButton(
             width = 200,
             height = 60,
-            text = "루틴 추가",
-            textStyle = korTitleStyle
+            text = "그룹 추가",
+            textStyle = AppStyles.korTitleStyle
         ) {
-            viewModel.insertRoutine(UserRoutine())
+            viewModel.insertGroup(TodoGroup())
         }
         Spacer(modifier = Modifier.padding(15.dp))
         GoalKeeperButton(
             width = 200,
             height = 60,
             text = "돌아가기",
-            textStyle = korTitleStyle
+            textStyle = AppStyles.korTitleStyle
         ) {
             navController.popBackStack()
         }

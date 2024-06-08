@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.firstOrNull
 
 class GroupRepository (private val grouptable : DatabaseReference) {
     //키값(String)자동생성
-    suspend fun InsertGroup(todoGroup: TodoGroup): String? {
+    fun InsertGroup(todoGroup: TodoGroup): String? {
         val newGroupRef = grouptable.push()
         val groupId = newGroupRef.key
 
@@ -22,6 +22,10 @@ class GroupRepository (private val grouptable : DatabaseReference) {
             return groupId
         }
         return null
+    }
+
+    fun insertGroup(todoGroup: TodoGroup) {
+        grouptable.child(todoGroup.groupName).setValue(todoGroup)
     }
 
     suspend fun DeleteGroup(todoGroup: TodoGroup){
