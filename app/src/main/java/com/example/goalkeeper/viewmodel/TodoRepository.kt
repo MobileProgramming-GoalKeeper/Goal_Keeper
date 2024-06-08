@@ -12,8 +12,16 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class TodoRepository(private val todotable : DatabaseReference) {
 
-    suspend fun insertTodo(userInfo: UserInfo, todo : Todo){
-        todotable.child(todo.todoId.toString()).setValue(todo)
+    //키값(String)자동생성
+    suspend fun insertTodo(todo : Todo): String?{
+        val newTodoRef = todotable.push()
+        val todoId = newTodoRef.key
+
+        todoId?.let {
+            val newTodo = todo.copy(todoId = it)
+            newTodoRef.setValue(newTodo)
+        }
+        return todoId
     }
 
     suspend fun deleteTodo(todo : Todo){
@@ -28,12 +36,13 @@ class TodoRepository(private val todotable : DatabaseReference) {
         todotable.child(todo.todoId.toString()).child("todoName").setValue(todo.todoName)
     }
     //투두 날짜 변경
-    suspend fun updatetodoDate(todo: Todo){
-        todotable.child(todo.todoId.toString()).child("todoDate").setValue(todo.todoDate)
+    suspend fun UpdatetodoDate(todo: Todo, newDate: String){
+        todotable.child(todo.todoId.toString()).child("todoDate").setValue(newDate)
     }
     //투두 시간 변경
-    fun updatetodoTime(todo: Todo){
-        todotable.child(todo.todoId.toString()).child("todoTime").setValue(todo)
+    suspend fun UpdatetodoTime(todo: Todo, newStartAt:String, newEndAt: String){
+        todotable.child(todo.todoId.toString()).child("todoStartAt").setValue(newStartAt)
+        todotable.child(todo.todoId.toString()).child("todoEndAt").setValue(newEndAt)
     }
     //투두 알림 여부 변경
     fun updatetodoAlert(todo: Todo){

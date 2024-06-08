@@ -1,6 +1,7 @@
 package com.example.goalkeeper
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -18,9 +20,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.nav.Routes
-import com.example.goalkeeper.screen.login.RegisterScreen
-import com.example.goalkeeper.screen.login.WelcomeScreen
 import com.example.goalkeeper.screen.MainScreen
+import com.example.goalkeeper.screen.RegisterScreen
+import com.example.goalkeeper.screen.WelcomeScreen
 import com.example.goalkeeper.ui.theme.GoalKeeperTheme
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModelFactory
@@ -73,6 +75,11 @@ fun MyApp() {
         UserRepository(goalKeeperDB.child("users"))
     ))
 
+    //테스트 데이터
+//    LaunchedEffect(Unit) {
+//        viewModel.setupTestData()
+//        Log.d("setup","set up Test Data.")
+//    }
     CompositionLocalProvider(
         LocalNavGraphViewModelStoreOwner provides navStoreOwner
     ) {

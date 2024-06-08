@@ -8,10 +8,20 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.firstOrNull
 
 class GroupRepository (private val grouptable : DatabaseReference) {
-    suspend fun InsertGroup(todoGroup: TodoGroup){
-        grouptable.child(todoGroup.groupId.toString()).setValue(todoGroup)
+    //키값(String)자동생성
+    suspend fun InsertGroup(todoGroup: TodoGroup): String? {
+        val newGroupRef = grouptable.push()
+        val groupId = newGroupRef.key
+
+        groupId?.let {
+            val newTodoGroup = todoGroup.copy(groupId = it)
+            newGroupRef.setValue(newTodoGroup)
+            return groupId
+        }
+        return null
     }
 
     suspend fun DeleteGroup(todoGroup: TodoGroup){
@@ -20,6 +30,15 @@ class GroupRepository (private val grouptable : DatabaseReference) {
     //그룹 이름 변경
     suspend fun UpdateGroupName(todoGroup: TodoGroup){
         grouptable.child(todoGroup.groupId.toString()).child("groupName").setValue(todoGroup.groupName)
+    }
+    suspend fun findGroupById(groupId : String) : TodoGroup? {
+        val allGroups = getAllGroup().firstOrNull() ?: return null
+        val group = allGroups.find { it.groupId == groupId }
+        return group
+    }
+    suspend fun updateGroup(group: TodoGroup) {
+        val groupRef = grouptable.child(group.groupId)
+        groupRef.setValue(group)
     }
 
     fun getAllGroup(): Flow<List<TodoGroup>> = callbackFlow {

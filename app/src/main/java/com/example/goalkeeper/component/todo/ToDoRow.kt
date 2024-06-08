@@ -47,9 +47,3 @@ fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
     }
 
 }
-
-@Composable
-fun ChangeToDoTime(todo: Todo) {
-//    var startAt by remember { mutableStateOf(todo.startAt) }
-
-}

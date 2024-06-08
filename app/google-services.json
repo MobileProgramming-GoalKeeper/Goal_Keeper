@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "505444473327",
-    "firebase_url": "https://goalkeeper-c30fc-default-rtdb.firebaseio.com",
-    "project_id": "goalkeeper-c30fc",
-    "storage_bucket": "goalkeeper-c30fc.appspot.com"
+    "project_number": "745140173102",
+    "project_id": "goalkeeper-8397c",
+    "storage_bucket": "goalkeeper-8397c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:505444473327:android:97d6a1fd4cd95d8d147e1a",
+        "mobilesdk_app_id": "1:745140173102:android:b7d7d2184d3561227be2bf",
         "android_client_info": {
           "package_name": "com.example.goalkeeper"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCvxaf29s4lGpJPqwqI_R9thEYZrB550rs"
+          "current_key": "AIzaSyDnl0Gkt-w3tS3l3uc6l9zeKxnmgQ5p1OU"
         }
       ],
       "services": {

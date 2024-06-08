@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,13 +29,26 @@ import com.example.goalkeeper.component.TopRoundedRectangle
 import com.example.goalkeeper.model.*
 import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.model.Todo
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
-fun ToDoGroupPrint(toDoGroup: TodoGroup, onMenuIconClick:(Todo) -> Unit) {
-    var todos by remember { mutableStateOf(toDoGroup.mainTodo) }
+fun ToDoGroupPrint(
+    toDoGroup: TodoGroup,
+    viewModel: GoalKeeperViewModel,
+    onMenuIconClick:(Todo) -> Unit)
+{
     val colorEnum = ToDoGroupColor.valueOf(toDoGroup.color)
     val iconEnum = ToDoGroupIcon.valueOf(toDoGroup.icon)
 
+    val itemList by viewModel.todoList.collectAsState(initial = emptyList())
+    val groupList by viewModel.groupList.collectAsState(initial = emptyList())
+
+    var todos = itemList.filter { it.groupId == toDoGroup.groupId }
+    val selectedGroup = groupList.find { it.groupId == toDoGroup.groupId }
+
+    LaunchedEffect(todos, selectedGroup) {
+        todos = itemList.filter { it.groupId == selectedGroup?.groupId }
+    }
     Box(contentAlignment = Alignment.CenterStart) {
         TopRoundedRectangle(500, 50, colorResource(id = R.color.bright_gray))
         Row {
@@ -67,15 +82,5 @@ fun ToDoGroupPrint(toDoGroup: TodoGroup, onMenuIconClick:(Todo) -> Unit) {
         }
     }
     Spacer(modifier = Modifier.padding(vertical = 16.dp))
-    /* //구분선
-        Divider(
-            color = Color.LightGray, // 색상
-            thickness = 2.dp, // 두께
-            modifier = Modifier
-                .padding(horizontal = 16.dp)// 양쪽 패딩
-                .padding(vertical = 16.dp)
-        )
-     */
-
 }
 
