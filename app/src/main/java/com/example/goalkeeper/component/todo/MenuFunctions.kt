@@ -109,6 +109,7 @@ fun ChangeDate(
 
                         val selectedTime = LocalTime.of(selectedHour, selectedMinute)
                         selectedDateTime = LocalDateTime.of(selectedDate, selectedTime)
+                        onDateSelected(selectedDateTime.toStringFormat(false))
 
                         showTimePicker = true
                     }
