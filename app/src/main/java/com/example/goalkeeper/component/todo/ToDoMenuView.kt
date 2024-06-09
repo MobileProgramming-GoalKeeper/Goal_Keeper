@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
+import com.example.goalkeeper.component.ChangeGroupDiaglog
 import com.example.goalkeeper.component.EditableText
 import com.example.goalkeeper.model.MAX_TODO_MEMO
 import com.example.goalkeeper.model.MAX_TODO_NAME
@@ -54,6 +55,8 @@ fun TodoDetailView(
 
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
+
+    var showChangeGroup by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -143,7 +146,9 @@ fun TodoDetailView(
                 showDatePicker = true
 //                calculateDateTime(todo, selectedDate, viewModel)
             }
-            TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp, {})
+            TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp) {
+                showChangeGroup = true
+            }
             TodoMenuRow("삭제하기", Icons.Filled.Delete) {
                 viewModel.deleteTodoItem(todo)
                 navController.popBackStack()
@@ -189,7 +194,17 @@ fun TodoDetailView(
                     }
                 )
             }
-
+            if(showChangeGroup){
+                ChangeGroupDiaglog(
+                    onChangeGroup = {selectedGroupId ->
+                        viewModel.updateGroupIdTodoItem(
+                            todo, todo.copy(groupId = selectedGroupId))
+                    },
+                    onDismiss = { showChangeGroup = false },
+                    todo = todo,
+                    showDialog = showChangeGroup
+                )
+            }
         }
     }
 }
