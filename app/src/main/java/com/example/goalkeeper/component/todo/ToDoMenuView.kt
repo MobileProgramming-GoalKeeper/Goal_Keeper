@@ -37,6 +37,8 @@ import com.example.goalkeeper.component.EditableText
 import com.example.goalkeeper.model.MAX_TODO_MEMO
 import com.example.goalkeeper.model.MAX_TODO_NAME
 import com.example.goalkeeper.model.Todo
+import com.example.goalkeeper.model.toLocalDateTime
+import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
@@ -44,12 +46,16 @@ import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 fun TodoDetailView(
     todo: Todo,
     navController: NavController,
-    viewModel: GoalKeeperViewModel,
-    onTodoChange: (Todo) -> Unit
+    onTodoChange: (Todo) -> Unit,
 ) {
     val context = LocalContext.current
+
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    var flag by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -98,22 +104,24 @@ fun TodoDetailView(
                 style = AppStyles.TodoMenuTitleStyle,
                 maxLength = MAX_TODO_NAME
             )
-            todo.todoStartAt?.let{
+
+            if (todo.todoStartAt != "") {
                 Text(
-                    text = todo.todoStartAt!!,
+                    text = todo.todoStartAt,
                     style = AppStyles.TodoMenuDateStyle
                 )
-            } ?: run {
+            } else {
                 Text(
                     text = todo.todoDate,
-                    style = AppStyles.TodoMenuDateStyle)
+                    style = AppStyles.TodoMenuDateStyle
+                )
             }
 
             Spacer(modifier = Modifier.padding(5.dp))
             EditableText(
                 text = todo.todoMemo,
                 onTextChange = {
-                    val updatedTodo = todo.copy(todoMemo =  it)
+                    val updatedTodo = todo.copy(todoMemo = it)
                     onTodoChange(updatedTodo)
                 },
                 style = AppStyles.TodoMemoStyle,
@@ -122,18 +130,78 @@ fun TodoDetailView(
             )
 
             TodoMenuRow("시간 알림", Icons.Filled.Notifications, {})
-            TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward, {
+            TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward) {
                 viewModel.updatePostponeTodoItem(todo)
-                val newTodo = DoItTomorrow(todo)
-                viewModel.updateDateTodoItem(todo, newTodo.todoDate)
-                viewModel.updateTimeTodoItem(todo, newTodo.todoStartAt, newTodo.todoEndAt)
-            })
-            TodoMenuRow("날짜 바꾸기", Icons.Filled.DateRange, {})
+                val newDate = todo.todoDate.toLocalDateTime().plusDays(1).toStringFormat(false)
+                viewModel.updateDateTodoItem(todo, newDate)
+                if (todo.todoStartAt.isNotEmpty()) {
+                    val newStartAt =
+                        todo.todoStartAt.toLocalDateTime().plusDays(1).toStringFormat(true)
+                    val newEndAt = todo.todoEndAt.toLocalDateTime().plusDays(1).toStringFormat(true)
+                    viewModel.updateTimeTodoItem(todo, newStartAt, newEndAt)
+                }
+            }
+            TodoMenuRow("날짜/시간 바꾸기", Icons.Filled.DateRange) {
+                showDatePicker = true
+//                calculateDateTime(todo, selectedDate, viewModel)
+            }
             TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp, {})
-            TodoMenuRow("삭제하기", Icons.Filled.Delete, {
+            TodoMenuRow("삭제하기", Icons.Filled.Delete) {
                 viewModel.deleteTodoItem(todo)
                 navController.popBackStack()
-            })
+            }
+
+            if (showDatePicker) {
+                ChangeDate(todo = todo,
+                    showDatePicker = showDatePicker,
+                    onDismissRequest = {
+                        showDatePicker = false
+                    },
+                    onDateSelected = { newDate ->
+                        selectedDate = newDate
+                        if (selectedDate.contains(":")) { //시간 정보가 있을때
+                            if(todo.todoStartAt!="") { //기존 startAt이 있으면 -> 시간간격 계산 가능
+                                val durationBetweenStartAndEnd =
+                                    todo.todoEndAt.toLocalDateTime().let {
+                                        java.time.Duration.between(
+                                            todo.todoStartAt.toLocalDateTime(),
+                                            it
+                                        )
+                                    }
+                                val newEndAt = durationBetweenStartAndEnd.let {
+                                    selectedDate.toLocalDateTime().plus(it)
+                                }
+                                viewModel.updateTimeTodoItem(
+                                    todo,
+                                    selectedDate,
+                                    newEndAt.toStringFormat(true)
+                                )
+                            }else{ //기존 startAt이 없다->시간 간격 계산 불가
+                                viewModel.updateTimeTodoItem(todo, selectedDate, selectedDate)
+                            }
+                        }else{ //시간정보 없다 -> 사용자가 시각 설정 안함
+                            viewModel.updateTimeTodoItem(todo, "", "")
+                        }
+                        viewModel.updateDateTodoItem(todo, selectedDate)
+
+                    },
+                    onTimeNotSelected = {
+//                        flag = true
+//                        viewModel.updateTimeTodoItem(todo, "", "")
+                    }
+                )
+            }
+//            if (selectedDate.isNotEmpty()) {
+//                if (selectedDate.contains(":")) {
+//                    val durationBetweenStartAndEnd = todo.todoEndAt.toLocalDateTime().let {
+//                        java.time.Duration.between(todo.todoStartAt.toLocalDateTime(), it)
+//                    }
+//                    val newEndAt = durationBetweenStartAndEnd.let {
+//                        selectedDate.toLocalDateTime().plus(it)
+//                    }
+//                    viewModel.updateTimeTodoItem(todo, selectedDate, newEndAt.toStringFormat(true))
+//                }
+//
         }
     }
 }

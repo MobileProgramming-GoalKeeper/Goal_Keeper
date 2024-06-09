@@ -53,18 +53,6 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-fun DoItTomorrow(todo: Todo): Todo {
-    val newDate = todo.todoDate.toLocalDateTime().plusDays(1)
-
-    val newStartAt = todo.todoStartAt?.toLocalDateTime()?.plusDays(1)?.toStringFormat(true)
-    val newEndAt = todo.todoEndAt?.toLocalDateTime()?.plusDays(1)?.toStringFormat(true)
-
-    return todo.copy(
-        todoDate = newDate.toStringFormat(if (newStartAt==null)false else true),
-        todoStartAt = newStartAt,
-        todoEndAt = newEndAt
-    )
-}
 
 fun copyToClipboard(context: Context, todo: Todo) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -81,14 +69,15 @@ fun ChangeDate(
     todo: Todo,
     showDatePicker: Boolean,
     onDismissRequest: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onDateSelected: (String) -> Unit,
+    onTimeNotSelected: () -> Unit // 시간 선택 안함을 알리는 콜백 추가
 ){
 
     val datePickerState = rememberDatePickerState()
 
-    var selectedHour by remember { mutableStateOf(LocalDateTime.now().hour) }
-    var selectedMinute by remember { mutableStateOf((LocalDateTime.now().minute / 10) * 10) }
-    var selectedDateTime by remember { mutableStateOf(todo.todoDate.toLocalDateTime()) }
+    var selectedHour by remember { mutableStateOf(if(todo.todoStartAt!="") todo.todoStartAt.toLocalDateTime().hour else LocalDateTime.now().hour ) }
+    var selectedMinute by remember { mutableStateOf(if(todo.todoStartAt!="")todo.todoStartAt.toLocalDateTime().minute else LocalDateTime.now().minute / 10 * 10) }
+    var selectedDateTime by remember { mutableStateOf(if(todo.todoStartAt!="") todo.todoStartAt.toLocalDateTime() else todo.todoDate.toLocalDateTime()) }
 
     var showTimePicker by remember { mutableStateOf(false) }
 
@@ -109,8 +98,7 @@ fun ChangeDate(
 
                         val selectedTime = LocalTime.of(selectedHour, selectedMinute)
                         selectedDateTime = LocalDateTime.of(selectedDate, selectedTime)
-                        onDateSelected(selectedDateTime.toStringFormat(false))
-
+//
                         showTimePicker = true
                     }
                 ) {
@@ -151,6 +139,7 @@ fun ChangeDate(
             dismissButton = {
                 TextButton(
                     onClick = {
+                        onTimeNotSelected()
                         onDateSelected(selectedDateTime.toStringFormat(false))
                         showTimePicker = false
 //                        timeInfo = false

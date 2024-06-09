@@ -175,7 +175,8 @@ fun AddTodoDialog(
                             onDismissRequest = { showDatePickerDialog = false },
                             onDateSelected = { date ->
                                 selectedDate = date
-                            }
+                            },
+                            onTimeNotSelected = {}
                         )
                     }
 
