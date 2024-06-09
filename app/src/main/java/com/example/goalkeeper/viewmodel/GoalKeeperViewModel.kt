@@ -234,6 +234,20 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             todoRepository.UpdatetodoTime(todo, newStartAt, newEndAt)
         }
     }
+    fun updateNameTodoItem(todo:Todo){
+        viewModelScope.launch {
+            todoRepository.updateTodoName(todo)
+            fetchTodos()
+            fetchGroups()
+        }
+    }
+    fun updateMemoTodoItem(todo:Todo){
+        viewModelScope.launch {
+            todoRepository.updatetodoMemo(todo)
+            fetchTodos()
+            fetchGroups()
+        }
+    }
 
     fun initRepositories(userInfo: UserInfo) {
         todoRepository =

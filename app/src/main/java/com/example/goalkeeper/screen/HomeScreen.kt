@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,7 +37,7 @@ fun HomeScreen() {
 //    }
 
     val groupListState by viewModel.groupList.collectAsState()
-    val itemListState by viewModel.todoList.collectAsState()
+    val todoListState by viewModel.todoList.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -68,16 +67,13 @@ fun HomeScreen() {
             ) { backStackEntry ->
                 val todoId = backStackEntry.arguments?.getString("todoId")
                 if (todoId != null) {
-                    itemListState.forEach { todo ->
-
-                        val todo = itemListState.find { it.todoId == todoId }
+                    todoListState.forEach { todo ->
+                        val todo = todoListState.find { it.todoId == todoId }
                         if (todo != null) {
                             TodoDetailView(
                                 todo = todo,
-                                navController = navController,
-                            ) { newTodo ->
-                                viewModel.updateTodo(todoId, newTodo)
-                            }
+                                navController = navController
+                            )
                         }
                         return@composable
                     }

@@ -46,7 +46,6 @@ import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 fun TodoDetailView(
     todo: Todo,
     navController: NavController,
-    onTodoChange: (Todo) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -54,7 +53,6 @@ fun TodoDetailView(
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
     var showDatePicker by remember { mutableStateOf(false) }
-    var flag by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
 
     Column(
@@ -99,7 +97,7 @@ fun TodoDetailView(
                 text = todo.todoName,
                 onTextChange = {
                     val updatedTodo = todo.copy(todoName = it)
-                    onTodoChange(updatedTodo)
+                    viewModel.updateNameTodoItem(updatedTodo)
                 },
                 style = AppStyles.TodoMenuTitleStyle,
                 maxLength = MAX_TODO_NAME
@@ -122,7 +120,7 @@ fun TodoDetailView(
                 text = todo.todoMemo,
                 onTextChange = {
                     val updatedTodo = todo.copy(todoMemo = it)
-                    onTodoChange(updatedTodo)
+                    viewModel.updateMemoTodoItem(updatedTodo)
                 },
                 style = AppStyles.TodoMemoStyle,
                 modifier = Modifier.size(350.dp, 100.dp),
@@ -191,17 +189,7 @@ fun TodoDetailView(
                     }
                 )
             }
-//            if (selectedDate.isNotEmpty()) {
-//                if (selectedDate.contains(":")) {
-//                    val durationBetweenStartAndEnd = todo.todoEndAt.toLocalDateTime().let {
-//                        java.time.Duration.between(todo.todoStartAt.toLocalDateTime(), it)
-//                    }
-//                    val newEndAt = durationBetweenStartAndEnd.let {
-//                        selectedDate.toLocalDateTime().plus(it)
-//                    }
-//                    viewModel.updateTimeTodoItem(todo, selectedDate, newEndAt.toStringFormat(true))
-//                }
-//
+
         }
     }
 }

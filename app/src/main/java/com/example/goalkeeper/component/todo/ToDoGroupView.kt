@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,15 +55,10 @@ fun ToDoGroupPrint(
     val colorEnum = ToDoGroupColor.valueOf(toDoGroup.color)
     val iconEnum = ToDoGroupIcon.valueOf(toDoGroup.icon)
 
-    val itemList by viewModel.todoList.collectAsState(initial = emptyList())
-    val groupList by viewModel.groupList.collectAsState(initial = emptyList())
+    val todoListState by viewModel.todoList.collectAsState()
+    val groupListState by viewModel.groupList.collectAsState()
 
-    var todos = itemList.filter { it.groupId == toDoGroup.groupId }
-    val selectedGroup = groupList.find { it.groupId == toDoGroup.groupId }
-
-    LaunchedEffect(todos, selectedGroup) {
-        todos = itemList.filter { it.groupId == selectedGroup?.groupId }
-    }
+    var todos = todoListState.filter { it.groupId == toDoGroup.groupId }
 
     var showAddDialog by remember { mutableStateOf(false) }
 
@@ -80,8 +74,6 @@ fun ToDoGroupPrint(
             Spacer(modifier = Modifier.padding(5.dp))
             Text(text = toDoGroup.groupName, style = GroupNameStyle)
             Spacer(modifier = Modifier.padding(5.dp))
-
-
             Icon(imageVector = Icons.Filled.Add,
                 contentDescription = "todo add button",
                 modifier = Modifier
