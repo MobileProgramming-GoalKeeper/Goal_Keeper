@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.SemanticsProperties.EditableText
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
+import com.example.goalkeeper.R
 import com.example.goalkeeper.component.ChangeGroupDiaglog
 import com.example.goalkeeper.component.EditableText
 import com.example.goalkeeper.model.MAX_TODO_MEMO
@@ -79,6 +82,16 @@ fun TodoDetailView(
                     }
             )
             Spacer(modifier = Modifier.weight(1f))
+            Icon(imageVector = Icons.Filled.Star,
+                contentDescription = "star",
+                tint = if(todo.bookmark) colorResource(id = R.color.Star_yellow) else Color.LightGray,
+                modifier = Modifier
+                    .size(60.dp)
+                    .padding(10.dp)
+                    .clickable {
+                        viewModel.updateBookmarkTodoItem(todo.copy(bookmark = !todo.bookmark))
+                    }
+            )
             Icon(
                 imageVector = Icons.Filled.Share,
                 contentDescription = "공유(복사)",
