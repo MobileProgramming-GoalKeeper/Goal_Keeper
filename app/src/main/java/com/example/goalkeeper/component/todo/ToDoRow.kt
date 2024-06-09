@@ -11,13 +11,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.model.MAX_TODO_MEMO_prev
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles.TodoMemoStyle
 import com.example.goalkeeper.style.AppStyles.TodoNameStyle
+import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
 fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
+    val viewModel: GoalKeeperViewModel =
+        viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
     var name by remember { mutableStateOf(todo.todoName) }
     var memo by remember { mutableStateOf(todo.todoMemo.take(MAX_TODO_MEMO_prev)) } //처음 30글자만
     var isDone by remember { mutableStateOf(todo.todoDone) }
@@ -37,7 +43,7 @@ fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
             checked = isDone,
             onCheckedChange = { checked ->
                 isDone = checked
-                todo.todoDone = checked
+                viewModel.updateDoneTodoItem(todo.copy(todoDone = checked))
             }
         )
         Column {
