@@ -22,6 +22,13 @@ fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
     var memo by remember { mutableStateOf(todo.todoMemo.take(MAX_TODO_MEMO_prev)) } //처음 30글자만
     var isDone by remember { mutableStateOf(todo.todoDone) }
 
+    val prevTodo by remember { mutableStateOf(todo) }
+    if (prevTodo != todo) {
+        name = todo.todoName
+        memo = todo.todoMemo.take(MAX_TODO_MEMO_prev)
+        isDone = todo.todoDone
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
