@@ -84,12 +84,24 @@ fun ToDoGroupPrint(
             )
             if (showAddDialog){
                 AddTodoDialog(
-                    onAddTodo = { title, memo, date ->
+                    onAddTodo = { title, memo, date, endDate ->
+                        var startAt = ""
+                        var endAt=""
+                        if(date.contains(":")){
+                            startAt = date
+                            if(endDate==""){
+                                endAt = date.toLocalDateTime().plusMinutes(10).toString()
+                            }else{
+                                endAt = endDate
+                            }
+                        }
                         val newTodo = Todo(
                             todoId = "new",
                             groupId = toDoGroup.groupId,
                             todoName = title,
                             todoDate = date,
+                            todoStartAt = startAt,
+                            todoEndAt = endAt,
                             todoMemo = memo)
                         viewModel.insertTodoItem(newTodo)
                     },
@@ -114,7 +126,7 @@ fun ToDoGroupPrint(
 
 @Composable
 fun AddTodoDialog(
-    onAddTodo: (String, String, String) -> Unit,
+    onAddTodo: (String, String, String, String) -> Unit,
     onDismiss: () -> Unit,
     toDoGroup: TodoGroup,
     showDialog: Boolean
@@ -124,6 +136,7 @@ fun AddTodoDialog(
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("날짜 선택하기") }
+    var selectedEndDate by remember { mutableStateOf("") }
 
     if (showDialog) {
         Dialog(onDismissRequest = { onDismiss() }) {
@@ -165,17 +178,15 @@ fun AddTodoDialog(
                             ),
                             showDatePicker = showDatePickerDialog,
                             onDismissRequest = { showDatePickerDialog = false },
-                            onDateSelected = { date ->
-                                selectedDate = date
-                            },
-                            onTimeNotSelected = {}
+                            onDateSelected = { selectedDate = it },
+                            onEndDateSelected = { selectedEndDate=it }
                         )
                     }
 
                     Button(
                         onClick = {
                             if (title.isNotEmpty() && selectedDate != "날짜 선택하기") {
-                                onAddTodo(title, memo, selectedDate)
+                                onAddTodo(title, memo, selectedDate, selectedEndDate)
                             }
                             onDismiss()
                         }

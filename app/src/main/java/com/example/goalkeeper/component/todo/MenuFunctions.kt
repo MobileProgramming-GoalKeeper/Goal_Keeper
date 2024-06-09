@@ -1,5 +1,6 @@
 package com.example.goalkeeper.component.todo
 
+import android.app.TimePickerDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -46,6 +47,7 @@ import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.toLocalDateTime
 import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles
+import com.example.goalkeeper.style.AppStyles.GroupNameStyle
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -70,18 +72,20 @@ fun ChangeDate(
     showDatePicker: Boolean,
     onDismissRequest: () -> Unit,
     onDateSelected: (String) -> Unit,
-    onTimeNotSelected: () -> Unit // 시간 선택 안함을 알리는 콜백 추가
-){
+    onEndDateSelected: (String) -> Unit, // EndTime을 선택했을때
+) {
 
     val datePickerState = rememberDatePickerState()
 
-    var selectedHour by remember { mutableStateOf(if(todo.todoStartAt!="") todo.todoStartAt.toLocalDateTime().hour else LocalDateTime.now().hour ) }
-    var selectedMinute by remember { mutableStateOf(if(todo.todoStartAt!="")todo.todoStartAt.toLocalDateTime().minute else LocalDateTime.now().minute / 10 * 10) }
-    var selectedDateTime by remember { mutableStateOf(if(todo.todoStartAt!="") todo.todoStartAt.toLocalDateTime() else todo.todoDate.toLocalDateTime()) }
-
+    var selectedHour by remember { mutableStateOf(if (todo.todoStartAt != "") todo.todoStartAt.toLocalDateTime().hour else LocalDateTime.now().hour) }
+    var selectedMinute by remember { mutableStateOf(if (todo.todoStartAt != "") todo.todoStartAt.toLocalDateTime().minute else LocalDateTime.now().minute / 10 * 10) }
+    var selectedDateTime by remember { mutableStateOf(if (todo.todoStartAt != "") todo.todoStartAt.toLocalDateTime() else todo.todoDate.toLocalDateTime()) }
     var showTimePicker by remember { mutableStateOf(false) }
 
-//    var timeInfo: Boolean = false
+    var selectedEndHour by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime().hour else LocalDateTime.now().hour) }
+    var selectedEndMinute by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime().minute else LocalDateTime.now().minute / 10 * 10) }
+    var selectedEndDateTime by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime() else todo.todoDate.toLocalDateTime()) }
+    var showEndTimePicker by remember { mutableStateOf(false) }
 
     if (showDatePicker) {
         DatePickerDialog(
@@ -119,6 +123,7 @@ fun ChangeDate(
 
     if (showTimePicker) {
         TimePickerDialog(
+            dialogTitle = "시작 시각 선택하기",
             onDismissRequest = { showTimePicker = false },
             confirmButton = {
                 TextButton(
@@ -129,20 +134,15 @@ fun ChangeDate(
 
                         showTimePicker = false
                         onDateSelected(selectedDateTime.toStringFormat(true))
-                        onDismissRequest()
-//                        timeInfo = true
-//                        // 사용자가 선택한 날짜 및 시간 정보 처리
-//                        println("Selected Date and Time: $selectedDateTime")
+                        showEndTimePicker = true
                     }
                 ) { Text("OK", style = AppStyles.TodoNameStyle) }
             },
             dismissButton = {
                 TextButton(
                     onClick = {
-                        onTimeNotSelected()
                         onDateSelected(selectedDateTime.toStringFormat(false))
                         showTimePicker = false
-//                        timeInfo = false
                         onDismissRequest()
                     }
                 ) { Text("시간 설정 안함", style = AppStyles.TodoNameStyle) }
@@ -153,9 +153,38 @@ fun ChangeDate(
             onMinuteSelected = { minute -> selectedMinute = minute }
         )
     }
-//    if (!timeInfo) selectedDateTime.toLocalDate()
-//    return selectedDateTime.toStringFormat(timeInfo)
+    if (showEndTimePicker) {
+        TimePickerDialog(
+            dialogTitle = "종료 시각 선택하기",
+            onDismissRequest = { showEndTimePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val selectedDate = selectedDateTime.toLocalDate()
+                        val selectedTime = LocalTime.of(selectedEndHour, selectedEndMinute)
+                        selectedEndDateTime = LocalDateTime.of(selectedDate, selectedTime)
 
+                        showEndTimePicker = false
+                        onEndDateSelected(selectedEndDateTime.toStringFormat(true))
+                        onDismissRequest()
+                    }
+                ) { Text("OK", style = AppStyles.TodoNameStyle) }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        onEndDateSelected(selectedDateTime.plusMinutes(10).toStringFormat(true))
+                        showEndTimePicker = false
+                        onDismissRequest()
+                    }
+                ) { Text("종료 시각 설정 안함", style = AppStyles.TodoNameStyle) }
+            },
+            selectedHour = selectedEndHour,
+            selectedMinute = selectedEndMinute,
+            onHourSelected = { hour -> selectedEndHour = hour },
+            onMinuteSelected = { minute -> selectedEndMinute = minute }
+        )
+    }
 }
 
 @Composable
@@ -167,6 +196,7 @@ fun TimePickerDialog(
     selectedMinute: Int,
     onHourSelected: (Int) -> Unit,
     onMinuteSelected: (Int) -> Unit,
+    dialogTitle: String
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -183,9 +213,10 @@ fun TimePickerDialog(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(text = dialogTitle, style=GroupNameStyle)
                 Text(
                     text = "Selected Time: ${selectedHour}시 ${selectedMinute}분",
-                    style = AppStyles.GroupNameStyle
+                    style = AppStyles.TodoMemoStyle
                 )
                 Spacer(modifier = Modifier.padding(top = 16.dp, bottom = 5.dp))
                 CustomTimeInput(

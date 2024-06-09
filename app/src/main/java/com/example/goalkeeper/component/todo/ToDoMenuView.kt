@@ -199,11 +199,9 @@ fun TodoDetailView(
                             viewModel.updateTimeTodoItem(todo, "", "")
                         }
                         viewModel.updateDateTodoItem(todo, selectedDate)
-
                     },
-                    onTimeNotSelected = {
-//                        flag = true
-//                        viewModel.updateTimeTodoItem(todo, "", "")
+                    onEndDateSelected = {selectedEndDate->
+                        viewModel.updateTimeTodoItem(todo,selectedDate, selectedEndDate)
                     }
                 )
             }
