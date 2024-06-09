@@ -43,7 +43,7 @@ class TodoRepository(private val todotable: DatabaseReference) {
     }
 
     //투두 시간 변경
-    suspend fun UpdatetodoTime(todo: Todo, newStartAt: String, newEndAt: String) {
+    suspend fun UpdatetodoTime(todo: Todo, newStartAt: String?, newEndAt: String?) {
         todotable.child(todo.todoId.toString()).child("todoStartAt").setValue(newStartAt)
         todotable.child(todo.todoId.toString()).child("todoEndAt").setValue(newEndAt)
     }
@@ -61,6 +61,10 @@ class TodoRepository(private val todotable: DatabaseReference) {
     //투두 완료 여부 변경
     fun updatetodoDone(todo: Todo) {
         todotable.child(todo.todoId.toString()).child("todoDone").setValue(todo.todoDone)
+    }
+
+    suspend fun UpdatePostPonedNum(todo: Todo) {
+        todotable.child(todo.todoId.toString()).child("postponedNum").setValue(todo.postponedNum+1)
     }
 
     //모든 투두 리스트로 가져옴.

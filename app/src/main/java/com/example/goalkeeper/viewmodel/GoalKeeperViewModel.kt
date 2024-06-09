@@ -63,10 +63,6 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         userRepository.updateThemeColor2(user.value!!)
     }
 
-    fun insertTodo(todo: Todo) {
-        userRepository.insertTodo(user.value!!, todo)
-    }
-
     fun loadTodoList(userInfo: UserInfo) {
         viewModelScope.launch {
             userRepository.getUsersTodo(userInfo).collect {
@@ -204,6 +200,39 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             }
         }
         _todoList.value = updatedList!!
+        fetchTodos()
+    }
+
+    fun deleteTodoItem(todo: Todo) {
+        viewModelScope.launch {
+            var group = groupRepository.findGroupById(todo.groupId)
+            if(group!=null){
+                group.mainTodo.remove(todo)
+                groupRepository.updateGroup(group)
+            }
+            todoRepository.deleteTodo(todo)
+
+            fetchTodos()
+            fetchGroups()
+        }
+    }
+
+    fun updatePostponeTodoItem(todo: Todo) {
+        viewModelScope.launch {
+            todoRepository.UpdatePostPonedNum(todo)
+            fetchTodos()
+        }
+    }
+
+    fun updateDateTodoItem(todo: Todo, newDate: String){
+        viewModelScope.launch {
+            todoRepository.UpdatetodoDate(todo, newDate)
+        }
+    }
+    fun updateTimeTodoItem(todo:Todo, newStartAt: String?, newEndAt:String?){
+        viewModelScope.launch {
+            todoRepository.UpdatetodoTime(todo, newStartAt, newEndAt)
+        }
     }
 
     fun initRepositories(userInfo: UserInfo) {

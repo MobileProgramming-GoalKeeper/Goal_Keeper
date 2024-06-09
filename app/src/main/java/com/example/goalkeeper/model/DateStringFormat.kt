@@ -19,6 +19,7 @@ fun String.toLocalDateTime(): LocalDateTime {
     if (this.contains(":")) {
         return LocalDateTime.parse(this, formatterWithTime)
     } else {
-        return LocalDateTime.parse(this, formatterWithoutTime)
+        val localDate = LocalDate.parse(this, formatterWithoutTime)
+        return LocalDateTime.of(localDate, LocalTime.MIDNIGHT)
     }
 }

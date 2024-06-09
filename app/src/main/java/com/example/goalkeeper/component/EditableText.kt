@@ -23,7 +23,8 @@ fun EditableText(
     text: String,
     onTextChange: (String) -> Unit,
     style: TextStyle = LocalTextStyle.current,
-    modifier: Modifier = Modifier
+    maxLength: Int = Int.MAX_VALUE,
+    modifier: Modifier = Modifier,
 ) {
     var isEditing by remember { mutableStateOf(false) }
     var currentText by remember { mutableStateOf(text) }
@@ -32,12 +33,10 @@ fun EditableText(
         TextField(
             value = currentText,
             onValueChange = {
-                currentText = it
-                onTextChange(it)
-//                when(flag){
-//                    0->todo.name = it
-//                    1->todo.memo = it
-//                }
+                if (it.length <= maxLength) {
+                    currentText = it
+                    onTextChange(it)
+                }
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text,

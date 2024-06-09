@@ -22,13 +22,13 @@ import com.example.goalkeeper.style.AppStyles
 
 
 @Composable
-fun TodoMenuRow(title: String, icon: ImageVector, onClick: (Boolean) -> Unit) {
+fun TodoMenuRow(title: String, icon: ImageVector, onClick: () -> Unit) {
     Spacer(modifier = Modifier.padding(10.dp))
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick }
+            .clickable { onClick() }
     ) {
         Box(
             modifier = Modifier
