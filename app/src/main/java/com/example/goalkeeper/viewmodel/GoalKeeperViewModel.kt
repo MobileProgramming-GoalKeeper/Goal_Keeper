@@ -191,18 +191,6 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         )
     }
 
-    fun updateTodo(todoId: String, newTodo: Todo) {
-        val updatedList = todoList.value?.map { todo ->
-            if (todo.todoId == todoId) {
-                newTodo
-            } else {
-                todo
-            }
-        }
-        _todoList.value = updatedList!!
-        fetchTodos()
-    }
-
     fun deleteTodoItem(todo: Todo) {
         viewModelScope.launch {
             var group = groupRepository.findGroupById(todo.groupId)
@@ -244,6 +232,23 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
     fun updateMemoTodoItem(todo:Todo){
         viewModelScope.launch {
             todoRepository.updatetodoMemo(todo)
+            fetchTodos()
+            fetchGroups()
+        }
+    }
+    fun updateGroupIdTodoItem(oldtodo:Todo, newtodo:Todo){
+        viewModelScope.launch {
+            var group = groupRepository.findGroupById(oldtodo.groupId)
+            if(group!=null){
+                group.mainTodo.remove(oldtodo)
+                groupRepository.updateGroup(group)
+            }
+            todoRepository.updateTodoGroup(newtodo)
+            group = groupRepository.findGroupById(newtodo.groupId)
+            if (group != null) {
+                group.mainTodo.add(newtodo)
+                groupRepository.updateGroup(group)
+            }
             fetchTodos()
             fetchGroups()
         }

@@ -29,7 +29,7 @@ class TodoRepository(private val todotable: DatabaseReference) {
 
     //속한 그룹 변경
     suspend fun updateTodoGroup(todo: Todo) {
-        todotable.child(todo.todoId.toString()).child("groupNum").setValue(todo.groupId)
+        todotable.child(todo.todoId.toString()).child("groupId").setValue(todo.groupId)
     }
 
     //투두 이름 변경
@@ -50,7 +50,7 @@ class TodoRepository(private val todotable: DatabaseReference) {
 
     //투두 알림 여부 변경
     fun updatetodoAlert(todo: Todo) {
-        todotable.child(todo.todoId.toString()).child("todoAlart").setValue(todo.todoAlert)
+        todotable.child(todo.todoId.toString()).child("todoAlert").setValue(todo.todoAlert)
     }
 
     //투두 메모 내용 변경
