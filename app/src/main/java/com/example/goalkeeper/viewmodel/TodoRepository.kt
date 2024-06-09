@@ -62,6 +62,9 @@ class TodoRepository(private val todotable: DatabaseReference) {
     fun updatetodoDone(todo: Todo) {
         todotable.child(todo.todoId.toString()).child("todoDone").setValue(todo.todoDone)
     }
+    fun updateBookmark(todo: Todo) {
+        todotable.child(todo.todoId.toString()).child("bookmark").setValue(todo.bookmark)
+    }
 
     suspend fun UpdatePostPonedNum(todo: Todo) {
         todotable.child(todo.todoId.toString()).child("postponedNum").setValue(todo.postponedNum+1)

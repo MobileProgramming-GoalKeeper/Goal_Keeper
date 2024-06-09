@@ -17,6 +17,7 @@ data class Todo (
     var todoDone: Boolean=false,
     val childTodo: List<Todo>? = listOf(),
     var postponedNum: Int=0,
+    var bookmark: Boolean = false
 )
 {
     constructor():this("0","0","todoName", "2024년 06월 13일","","",false,"memo",false,null, 0)

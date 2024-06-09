@@ -257,6 +257,25 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
     fun updateDoneTodoItem(todo:Todo){
         viewModelScope.launch {
             todoRepository.updatetodoDone(todo)
+            val group = groupRepository.findGroupById(todo.groupId)
+            if (group != null) {
+                group.mainTodo.remove(todo.copy(todoDone=!todo.todoDone))
+                group.mainTodo.add(todo)
+                groupRepository.updateGroup(group)
+            }
+            fetchTodos()
+            fetchGroups()
+        }
+    }
+    fun updateBookmarkTodoItem(todo:Todo){
+        viewModelScope.launch {
+            todoRepository.updateBookmark(todo)
+            val group = groupRepository.findGroupById(todo.groupId)
+            if (group != null) {
+                group.mainTodo.remove(todo.copy(bookmark =!todo.bookmark))
+                group.mainTodo.add(todo)
+                groupRepository.updateGroup(group)
+            }
             fetchTodos()
             fetchGroups()
         }
