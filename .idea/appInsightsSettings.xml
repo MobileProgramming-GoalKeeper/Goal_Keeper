@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.goalkeeper" />
-                  <option name="mobileSdkAppId" value="1:505444473327:android:97d6a1fd4cd95d8d147e1a" />
-                  <option name="projectId" value="goalkeeper-c30fc" />
-                  <option name="projectNumber" value="505444473327" />
+                  <option name="mobileSdkAppId" value="1:745140173102:android:b7d7d2184d3561227be2bf" />
+                  <option name="projectId" value="goalkeeper-8397c" />
+                  <option name="projectNumber" value="745140173102" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
