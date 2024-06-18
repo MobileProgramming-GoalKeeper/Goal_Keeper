@@ -9,4 +9,11 @@ data class TodoGroup(
 )
 {
     constructor():this ("0","groupName")
+    constructor(groupName: String, color: String, icon: String) : this(
+        groupId = "0",
+        groupName = groupName,
+        mainTodo = mutableListOf(),
+        color = color,
+        icon = icon
+    )
 }

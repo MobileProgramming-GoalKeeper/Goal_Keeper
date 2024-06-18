@@ -72,7 +72,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
     }
 
     fun insertGroup(group: TodoGroup) {
-        groupRepository.insertGroup(group)
+        groupRepository.InsertGroup(group)
     }
 
     fun insertRoutine(userRoutine: UserRoutine) {

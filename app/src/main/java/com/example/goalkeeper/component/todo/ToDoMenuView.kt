@@ -1,6 +1,5 @@
 package com.example.goalkeeper.component.todo
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.semantics.SemanticsProperties.EditableText
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -43,6 +40,7 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.ChangeGroupDiaglog
 import com.example.goalkeeper.component.EditableText
+import com.example.goalkeeper.component.todo.timealarm.setTodoAlarm
 import com.example.goalkeeper.model.MAX_TODO_MEMO
 import com.example.goalkeeper.model.MAX_TODO_NAME
 import com.example.goalkeeper.model.Todo
@@ -50,7 +48,6 @@ import com.example.goalkeeper.model.toLocalDateTime
 import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
-import com.example.goalkeeper.viewmodel.TodoRepository
 
 @Composable
 fun TodoDetailView(
@@ -65,6 +62,8 @@ fun TodoDetailView(
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     var showNotificationDialog by remember { mutableStateOf(false) }
+    var notificationTime by remember { mutableStateOf("") } // 알림 시간 저장
+
 
     var showChangeGroup by remember { mutableStateOf(false) }
 
@@ -176,26 +175,37 @@ fun TodoDetailView(
                 navController.popBackStack()
             }
 
+            // 알림 설정 다이얼로그
             if (showNotificationDialog) {
                 AlertDialog(
                     onDismissRequest = { showNotificationDialog = false },
                     title = { Text("알림 설정") },
                     text = {
                         Column {
-                            Text("알림을 설정하시겠습니까?")
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                Button(onClick = {
-                                    showNotificationDialog = false
-                                    //showDatePicker = true
-                                }) {
-                                    Text("예")
+                            if (todo.todoStartAt.isNotEmpty()) {
+                                Text("설정된 시간: ${todo.todoStartAt}")
+                                Text("이 시간에 알림을 설정할까요?")
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                ) {
+                                    Button(onClick = {
+                                        showNotificationDialog = false
+                                        todo.todoAlert = true
+                                        setTodoAlarm(context, todo) // 알림 설정 함수 호출
+                                    }) {
+                                        Text("On")
+                                    }
+                                    Button(onClick = {
+                                        showNotificationDialog = false
+                                        todo.todoAlert = false
+                                        setTodoAlarm(context, todo) // 알림 해제 함수 호출
+                                    }) {
+                                        Text("Off")
+                                    }
                                 }
-                                Button(onClick = { showNotificationDialog = false }) {
-                                    Text("아니오")
-                                }
+                            } else {
+                                Text("시간이 설정되지 않았습니다. 시간을 먼저 설정해주세요.")
                             }
                         }
                     },
@@ -203,6 +213,8 @@ fun TodoDetailView(
                     dismissButton = {}
                 )
             }
+
+
 
             if (showDatePicker) {
                 ChangeDate(todo = todo,
@@ -256,3 +268,5 @@ fun TodoDetailView(
         }
     }
 }
+
+
