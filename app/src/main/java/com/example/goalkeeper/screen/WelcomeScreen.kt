@@ -1,5 +1,7 @@
 package com.example.goalkeeper.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,9 +31,9 @@ import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.loginTextStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun WelcomeScreen(navController: NavHostController) {
-
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
@@ -41,9 +43,6 @@ fun WelcomeScreen(navController: NavHostController) {
     LaunchedEffect(viewModel.user.value) {
         if (viewModel.user.value != null) {
             viewModel.initRepositories(viewModel.user.value!!)
-
-//            테스트 데이터 추가
-//            viewModel.setupTestData()
             viewModel.fetchTodos()
             viewModel.fetchGroups()
             navController.navigate(Routes.Main.route)

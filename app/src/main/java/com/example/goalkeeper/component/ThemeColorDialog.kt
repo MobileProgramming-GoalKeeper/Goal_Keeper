@@ -1,4 +1,4 @@
-package com.example.goalkeeper.screen
+package com.example.goalkeeper.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,17 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
-import com.example.goalkeeper.component.GoalKeeperButton
-import com.example.goalkeeper.component.ColorPickerDialog
-import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
-fun ThemeColorScreen(navController: NavHostController) {
-
+fun ThemeColorDialog(onDismiss: () -> Unit) {
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
@@ -65,57 +61,50 @@ fun ThemeColorScreen(navController: NavHostController) {
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Surface(
+            modifier = Modifier.size(width = 300.dp, height = 200.dp),
+            shape = RoundedCornerShape(40.dp),
+            color = Color.White
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(width = 100.dp, height = 100.dp)
-                        .background(
-                            color = Color(user.themeColor1),
-                            shape = RoundedCornerShape(50.dp)
-                        )
-                        .clickable { colorPickerDialog1Visible = true },
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 100.dp, height = 100.dp)
+                            .background(
+                                color = Color(user.themeColor1),
+                                shape = RoundedCornerShape(50.dp)
+                            )
+                            .clickable { colorPickerDialog1Visible = true },
+                    )
 
-                Text(text = "테마색 1", textAlign = TextAlign.Center)
+                    Text(text = "테마색 1", textAlign = TextAlign.Center)
+                }
+
+                Spacer(modifier = Modifier.padding(start = 20.dp))
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 100.dp, height = 100.dp)
+                            .background(
+                                color = Color(user.themeColor2),
+                                shape = RoundedCornerShape(50.dp)
+                            )
+                            .clickable { colorPickerDialog2Visible = true },
+                    )
+
+                    Text(text = "테마색 2", textAlign = TextAlign.Center)
+                }
             }
-
-            Spacer(modifier = Modifier.padding(start = 20.dp))
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(width = 100.dp, height = 100.dp)
-                        .background(
-                            color = Color(user.themeColor2),
-                            shape = RoundedCornerShape(50.dp)
-                        )
-                        .clickable { colorPickerDialog2Visible = true },
-                )
-
-                Text(text = "테마색 2", textAlign = TextAlign.Center)
-            }
-        }
-
-        Spacer(modifier = Modifier.padding(top = 10.dp))
-        GoalKeeperButton(
-            width = 100,
-            height = 100,
-            text = "돌아가기",
-            textStyle = korTitleStyle
-        ) {
-            navController.popBackStack()
         }
     }
 }

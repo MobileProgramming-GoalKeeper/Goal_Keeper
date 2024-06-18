@@ -3,6 +3,8 @@ package com.example.goalkeeper.screen
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.component.todo.ToDoGroupPrint
 import com.example.goalkeeper.component.todo.TodoDetailView
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.time.LocalDate
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +54,8 @@ import java.util.Locale
 import androidx.compose.ui.graphics.Color
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen() {
 
@@ -59,8 +63,7 @@ fun HomeScreen() {
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
-
-    //    테스트 데이터
+//        테스트 데이터
 //    LaunchedEffect(Unit) {
 //        viewModel.setupTestData()
 //        Log.d("setup","set up Test Data.")

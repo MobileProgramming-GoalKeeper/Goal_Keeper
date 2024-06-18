@@ -75,8 +75,24 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         groupRepository.insertGroup(group)
     }
 
-    fun insertRoutine(routine: UserRoutine) {
-        routineRepository.insertRoutine(routine)
+    fun insertRoutine(userRoutine: UserRoutine) {
+        routineRepository.insertRoutine(userRoutine)
+    }
+
+    fun deleteRoutine(userRoutine: UserRoutine) {
+        routineRepository.deleteRoutine(userRoutine)
+    }
+
+    fun updateRoutineAlert(userRoutine: UserRoutine) {
+        routineRepository.updateroutineAlert(userRoutine)
+    }
+
+    fun loadRoutineList(){
+        viewModelScope.launch {
+            routineRepository.getAllRoutine().collect {
+                _routineList.value = it
+            }
+        }
     }
 
     fun fetchTodos() {
