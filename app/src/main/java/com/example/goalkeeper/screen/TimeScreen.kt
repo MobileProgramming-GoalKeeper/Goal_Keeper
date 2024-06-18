@@ -104,6 +104,9 @@ fun TimeOnScreen() {
     val todoListState by viewModel.todoList.collectAsState()
     var showPopup by remember { mutableStateOf(false) }
     var selectedTodos by remember { mutableStateOf<List<Todo>>(emptyList()) }
+    val user = viewModel.user.value!!
+    val themeColor1 = Color(user.themeColor1)
+    val themeColor2 = Color(user.themeColor2)
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -128,10 +131,14 @@ fun TimeOnScreen() {
                                 todoDateOnly == todayString && cellTime >= todoStart && cellTime < todoEnd
                             }
                         } else emptyList()
+                        val alphaValue = if (cellTodos.size > 1) {
+                            (1f - (cellTodos.size * 0.2f).coerceAtMost(0.2f))
+                        } else {
+                            1f
+                        }
                         val backgroundColor = when {
-                            cellTodos.any { it.bookmark } -> Yellow1
-                            cellTodos.size > 1 -> Blue1
-                            cellTodos.size == 1 -> Pink1
+                            cellTodos.any { it.bookmark } -> themeColor2.copy(alpha = alphaValue)
+                            cellTodos.size >= 1 -> themeColor1.copy(alpha = alphaValue)
                             else -> Color.Transparent
                         }
                         Box(
