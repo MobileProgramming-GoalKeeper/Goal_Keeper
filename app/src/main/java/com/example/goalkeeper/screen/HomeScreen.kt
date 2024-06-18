@@ -31,7 +31,7 @@ fun HomeScreen() {
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
-    //    테스트 데이터
+//        테스트 데이터
 //    LaunchedEffect(Unit) {
 //        viewModel.setupTestData()
 //        Log.d("setup","set up Test Data.")
