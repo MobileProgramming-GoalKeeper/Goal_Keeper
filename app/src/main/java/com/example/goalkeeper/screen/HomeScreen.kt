@@ -29,7 +29,6 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.component.todo.ToDoGroupPrint
 import com.example.goalkeeper.component.todo.TodoDetailView
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.time.LocalDate
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
@@ -49,13 +48,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.LaunchedEffect
 import java.time.format.TextStyle
 import java.util.Locale
 import androidx.compose.ui.graphics.Color
+import com.example.goalkeeper.component.todo.SubTodoDetailView
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen() {
 
@@ -81,42 +81,54 @@ fun HomeScreen() {
                 modifier = Modifier.padding(16.dp),
                 onSelectedDate = { selectedDate ->
                     // 선택한 날짜 처리
+                    // todoListState filter {todo.todoDate.toString() == selectedDate.toString()} 처리..
                     Log.d("Calender", "Selected date: $selectedDate")
                 }
             )
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(groupListState) { todoGroup ->
-                    ToDoGroupPrint(toDoGroup = todoGroup) { todo ->
-                        // TodoDetailView로 이동
-                        navController.navigate("todoMenu/${todo.todoId}")
-                    }
+                    ToDoGroupPrint(toDoGroup = todoGroup, navController = navController)
                 }
             }
-
         }
-        NavHost(
-            navController = navController,
-            startDestination = "todoMenu/{todoId}",
-            modifier = Modifier.fillMaxSize()
-        ) {
-            composable(
-                route = "todoMenu/{todoId}",
-                arguments = listOf(navArgument("todoId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val todoId = backStackEntry.arguments?.getString("todoId")
-                if (todoId != null) {
-                    todoListState.forEach { todo ->
-                        val todo = todoListState.find { it.todoId == todoId }
-                        if (todo != null) {
-                            TodoDetailView(
-                                todo = todo,
-                                navController = navController
-                            )
-                        }
-                        return@composable
+
+    }
+    NavHost(
+        navController = navController,
+        startDestination = "todoMenu/{todoId}",
+        modifier = Modifier.fillMaxSize()
+    ) {
+        composable(
+            route = "todoMenu/{todoId}",
+            arguments = listOf(navArgument("todoId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val todoId = backStackEntry.arguments?.getString("todoId")
+            if (todoId != null) {
+                todoListState.forEach { todo ->
+                    val todo = todoListState.find { it.todoId == todoId }
+                    if (todo != null) {
+                        TodoDetailView(
+                            todo = todo,
+                            navController = navController
+                        )
                     }
+//                        return@composable
                 }
+            }
+        }
+        composable(
+            route = "subTodoMenuView/{subTodoId}",
+            arguments = listOf(navArgument("subTodoId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val subTodoId = backStackEntry.arguments?.getString("subTodoId")
+            val subTodoListState by viewModel.subTodoList.collectAsState()
+            val subTodo = subTodoListState.find { it.subTodoId == subTodoId }
+            if (subTodo != null) {
+                SubTodoDetailView(
+                    subTodo = subTodo,
+                    navController = navController
+                )
             }
         }
     }
@@ -129,7 +141,14 @@ fun Calender(
     onSelectedDate: (LocalDate) -> Unit,
 ) {
     var selectedDate by remember { mutableStateOf(currentDate) }
-    var currentMonth by remember { mutableStateOf(YearMonth.of(currentDate.year, currentDate.month)) }
+    var currentMonth by remember {
+        mutableStateOf(
+            YearMonth.of(
+                currentDate.year,
+                currentDate.month
+            )
+        )
+    }
 
     Column(modifier = modifier) {
         Row(
@@ -169,7 +188,10 @@ fun Calender(
 
         Column {
             // 첫 번째 주
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
                 repeat(startOffset) {
                     Spacer(modifier = Modifier.size(40.dp))
                 }
@@ -187,7 +209,10 @@ fun Calender(
 
             // 나머지 주
             daysOfMonth.drop(7 - startOffset).chunked(7).forEach { week ->
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
                     week.forEach { day ->
                         Day(
                             day = day,
@@ -228,7 +253,7 @@ fun DaysOfWeek() {
 fun Day(
     day: LocalDate,
     isSelected: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val backgroundColor = if (isSelected) Color.Black else Color.Transparent
     val textColor = if (isSelected) Color.White else Color.Black
