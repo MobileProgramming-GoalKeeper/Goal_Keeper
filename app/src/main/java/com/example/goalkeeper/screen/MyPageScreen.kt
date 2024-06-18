@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperButton
+import com.example.goalkeeper.component.ThemeColorDialog
 import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.korTitleStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
@@ -35,6 +40,10 @@ fun MyPageScreen() {
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
     val user = viewModel.user.value!!
+
+    var showThemeColorDialog by remember { mutableStateOf(false) }
+
+    if (showThemeColorDialog) { ThemeColorDialog { showThemeColorDialog = false } }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -76,14 +85,14 @@ fun MyPageScreen() {
                         text = "테마색",
                         textStyle = korTitleStyle
                     ) {
-                        navController.navigate(Routes.ThemeColor.route)
+                        showThemeColorDialog = true
                     }
 
                     Spacer(modifier = Modifier.padding(15.dp))
                     GoalKeeperButton(
                         width = 300,
                         height = 60,
-                        text = "루틴 설정",
+                        text = "루틴",
                         textStyle = korTitleStyle
                     ) {
                         navController.navigate(Routes.Routine.route)
@@ -93,7 +102,7 @@ fun MyPageScreen() {
                     GoalKeeperButton(
                         width = 300,
                         height = 60,
-                        text = "그룹 설정",
+                        text = "그룹",
                         textStyle = korTitleStyle
                     ) {
                         navController.navigate(Routes.Group.route)
@@ -102,7 +111,6 @@ fun MyPageScreen() {
             }
             composable(Routes.Statistics.route) { StatisticsScreen(navController) }
             composable(Routes.Routine.route) { RoutineScreen(navController) }
-            composable(Routes.ThemeColor.route) { ThemeColorScreen(navController) }
             composable(Routes.Group.route) { GroupScreen(navController) }
         }
     }

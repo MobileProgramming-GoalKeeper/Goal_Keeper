@@ -14,15 +14,15 @@ class RoutineRepository (private val routinetable : DatabaseReference) {
         routinetable.child(userRoutine.routineName).setValue(userRoutine)
     }
 
-    suspend fun DeleteRoutine(userRoutine: UserRoutine){
+    fun deleteRoutine(userRoutine: UserRoutine){
         routinetable.child(userRoutine.routineName).removeValue()
     }
     //루틴 이름 변경
-    suspend fun UpdateroutineName(userRoutine: UserRoutine){
+    fun updateroutineName(userRoutine: UserRoutine){
         routinetable.child(userRoutine.routineName).setValue(userRoutine.routineName)
     }
     //알림 여부 변경
-    suspend fun UpdateroutineAlert(userRoutine: UserRoutine){
+    fun updateroutineAlert(userRoutine: UserRoutine){
         routinetable.child(userRoutine.routineName).child("routineAlert").setValue(userRoutine.routineAlert)
     }
 
