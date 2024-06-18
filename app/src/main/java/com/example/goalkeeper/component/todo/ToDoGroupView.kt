@@ -16,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperTextField
@@ -47,7 +49,7 @@ import java.time.LocalDateTime
 @Composable
 fun ToDoGroupPrint(
     toDoGroup: TodoGroup,
-    onMenuIconClick: (Todo) -> Unit,
+    navController: NavController
 ) {
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
@@ -116,9 +118,7 @@ fun ToDoGroupPrint(
     }
     Column {
         todos.forEach { todo ->
-            TodoRow(todo = todo) {
-                onMenuIconClick(todo)
-            }
+            TodoRow(todo = todo, navController = navController)
         }
     }
     Spacer(modifier = Modifier.padding(vertical = 16.dp))

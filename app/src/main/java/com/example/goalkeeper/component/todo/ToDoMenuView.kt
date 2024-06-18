@@ -1,6 +1,5 @@
 package com.example.goalkeeper.component.todo
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,11 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,23 +36,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.semantics.SemanticsProperties.EditableText
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.ChangeGroupDiaglog
 import com.example.goalkeeper.component.EditableText
+import com.example.goalkeeper.component.GoalKeeperTextField
 import com.example.goalkeeper.model.MAX_TODO_MEMO
 import com.example.goalkeeper.model.MAX_TODO_NAME
+import com.example.goalkeeper.model.SubTodo
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.toLocalDateTime
 import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles
+import com.example.goalkeeper.style.AppStyles.GroupNameStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
-import com.example.goalkeeper.viewmodel.TodoRepository
 
 @Composable
 fun TodoDetailView(
@@ -67,6 +70,7 @@ fun TodoDetailView(
     var showNotificationDialog by remember { mutableStateOf(false) }
 
     var showChangeGroup by remember { mutableStateOf(false) }
+    var showAddSub by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -171,6 +175,9 @@ fun TodoDetailView(
             TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp) {
                 showChangeGroup = true
             }
+            TodoMenuRow("세부 할 일 추가하기", Icons.Filled.ArrowDropDown) {
+                showAddSub = true
+            }
             TodoMenuRow("삭제하기", Icons.Filled.Delete) {
                 viewModel.deleteTodoItem(todo)
                 navController.popBackStack()
@@ -253,6 +260,70 @@ fun TodoDetailView(
                     showDialog = showChangeGroup
                 )
             }
+
+            if(showAddSub){
+                AddSubTodoDialog(
+                    onAddSubTodo = {title, memo ->
+                        viewModel.insertSubItem(
+                            SubTodo(subName = title, subMemo = memo),
+                            todo.todoId
+                        )
+                    },
+                    onDismiss = {showAddSub = false},
+                    showDialog = showAddSub
+                )
+            }
         }
     }
 }
+
+@Composable
+fun AddSubTodoDialog(
+    onAddSubTodo: (String, String) -> Unit,
+    onDismiss: () -> Unit,
+    showDialog: Boolean
+) {
+    var title by remember { mutableStateOf("") }
+    var memo by remember { mutableStateOf("") }
+
+    if (showDialog) {
+        Dialog(onDismissRequest = { onDismiss() }) {
+            Surface(color = Color.White) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "서브 할 일 추가", style = GroupNameStyle)
+                    Spacer(modifier = Modifier.padding(bottom = 8.dp))
+                    GoalKeeperTextField(
+                        width = 300,
+                        height = 60,
+                        value = title,
+                        label = "서브 할 일",
+                        maxLength = MAX_TODO_NAME
+                    ) { title = it }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    GoalKeeperTextField(
+                        width = 300,
+                        height = 60,
+                        value = memo,
+                        label = "서브 메모",
+                        maxLength = MAX_TODO_MEMO
+                    ) { memo = it }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = {
+                            if (title.isNotEmpty()) {
+                                onAddSubTodo(title, memo)
+                            }
+                            onDismiss()
+                        }
+                    ) {
+                        Text("확인")
+                    }
+                }
+            }
+        }
+    }
+}
+

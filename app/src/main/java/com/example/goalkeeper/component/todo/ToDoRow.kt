@@ -12,17 +12,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.model.MAX_TODO_MEMO_prev
+import com.example.goalkeeper.model.SubTodo
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles.TodoMemoStyle
 import com.example.goalkeeper.style.AppStyles.TodoNameStyle
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 
 @Composable
-fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
+fun TodoRow(todo: Todo, navController: NavController) {
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
+    val subTodoList by viewModel.subTodoList.collectAsState()
+    val subTodos = subTodoList.filter { it.rootTodoId == todo.todoId }
 
     var name by remember { mutableStateOf(todo.todoName) }
     var memo by remember { mutableStateOf(todo.todoMemo.take(MAX_TODO_MEMO_prev)) } //처음 30글자만
@@ -35,15 +40,64 @@ fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
         isDone = todo.todoDone
     }
 
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = isDone,
+                onCheckedChange = { checked ->
+                    isDone = checked
+                    viewModel.updateDoneTodoItem(todo.copy(todoDone = checked))
+                }
+            )
+            Column {
+                Text(text = name, style = TodoNameStyle)
+                Text(text = memo, style = TodoMemoStyle)
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Filled.MoreVert,
+                contentDescription = "todoMenu",
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .clickable { navController.navigate("todoMenu/${todo.todoId}") }
+            )
+        }
+        // SubTodos 출력
+        subTodos.forEach { subTodo ->
+            SubTodoRow(subTodo = subTodo, navController = navController)
+        }
+    }
+}
+
+@Composable
+fun SubTodoRow(subTodo: SubTodo, navController: NavController) {
+    val viewModel: GoalKeeperViewModel =
+        viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
+
+    var name by remember { mutableStateOf(subTodo.subName) }
+    var memo by remember { mutableStateOf(subTodo.subMemo.take(MAX_TODO_MEMO_prev)) } // 처음 30글자만
+    var isDone by remember { mutableStateOf(subTodo.subDone) }
+
+    val prevSubTodo by remember { mutableStateOf(subTodo) }
+    if (prevSubTodo != subTodo) {
+        name = subTodo.subName
+        memo = subTodo.subMemo.take(MAX_TODO_MEMO_prev)
+        isDone = subTodo.subDone
+    }
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp), // 공백 추가
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
             checked = isDone,
             onCheckedChange = { checked ->
                 isDone = checked
-                viewModel.updateDoneTodoItem(todo.copy(todoDone = checked))
+                viewModel.updateSubItem(subTodo.copy(subDone=checked))
             }
         )
         Column {
@@ -53,11 +107,10 @@ fun TodoRow(todo: Todo, onMenuIconClicked: (Todo) -> Unit) {
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = Icons.Filled.MoreVert,
-            contentDescription = "todoMenu",
+            contentDescription = "subTodoMenu",
             modifier = Modifier
                 .padding(end = 10.dp)
-                .clickable { onMenuIconClicked(todo) }
+                .clickable { navController.navigate("subTodoMenuView/${subTodo.subTodoId}") }
         )
     }
-
 }

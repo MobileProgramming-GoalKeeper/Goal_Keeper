@@ -1,5 +1,9 @@
 package com.example.goalkeeper.model
 
 data class SubTodo (
-    val childTodo: List<Todo> = listOf()
+    var subTodoId: String="",
+    var rootTodoId: String="",
+    var subName: String="",
+    var subMemo: String="",
+    var subDone: Boolean=false
 )
