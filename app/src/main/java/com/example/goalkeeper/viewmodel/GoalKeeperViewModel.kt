@@ -289,4 +289,10 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         routineRepository =
             RoutineRepository(dbReference.child("users").child(userInfo.userId).child("routines"))
     }
+
+    fun updateAlertTodoItem(todo:Todo) {
+        viewModelScope.launch {
+            todoRepository.updatetodoAlert(todo)
+        }
+    }
 }

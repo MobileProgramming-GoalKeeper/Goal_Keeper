@@ -1,7 +1,9 @@
 package com.example.goalkeeper.component.todo
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,8 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.SemanticsProperties.EditableText
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -45,6 +50,7 @@ import com.example.goalkeeper.model.toLocalDateTime
 import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
+import com.example.goalkeeper.viewmodel.TodoRepository
 
 @Composable
 fun TodoDetailView(
@@ -58,6 +64,7 @@ fun TodoDetailView(
 
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
+    var showNotificationDialog by remember { mutableStateOf(false) }
 
     var showChangeGroup by remember { mutableStateOf(false) }
 
@@ -143,7 +150,9 @@ fun TodoDetailView(
                 maxLength = MAX_TODO_MEMO
             )
 
-            TodoMenuRow("시간 알림", Icons.Filled.Notifications, {})
+            TodoMenuRow("시간 알림", Icons.Filled.Notifications, {
+                showNotificationDialog = true
+            })
             TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward) {
                 viewModel.updatePostponeTodoItem(todo)
                 val newDate = todo.todoDate.toLocalDateTime().plusDays(1).toStringFormat(false)
@@ -165,6 +174,34 @@ fun TodoDetailView(
             TodoMenuRow("삭제하기", Icons.Filled.Delete) {
                 viewModel.deleteTodoItem(todo)
                 navController.popBackStack()
+            }
+
+            if (showNotificationDialog) {
+                AlertDialog(
+                    onDismissRequest = { showNotificationDialog = false },
+                    title = { Text("알림 설정") },
+                    text = {
+                        Column {
+                            Text("알림을 설정하시겠습니까?")
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                Button(onClick = {
+                                    showNotificationDialog = false
+                                    //showDatePicker = true
+                                }) {
+                                    Text("예")
+                                }
+                                Button(onClick = { showNotificationDialog = false }) {
+                                    Text("아니오")
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {},
+                    dismissButton = {}
+                )
             }
 
             if (showDatePicker) {
