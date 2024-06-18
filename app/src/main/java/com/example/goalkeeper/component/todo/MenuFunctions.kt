@@ -1,9 +1,12 @@
 package com.example.goalkeeper.component.todo
 
-import android.app.TimePickerDialog
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,12 +51,13 @@ import com.example.goalkeeper.model.toLocalDateTime
 import com.example.goalkeeper.model.toStringFormat
 import com.example.goalkeeper.style.AppStyles
 import com.example.goalkeeper.style.AppStyles.GroupNameStyle
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 fun copyToClipboard(context: Context, todo: Todo) {
@@ -305,3 +309,31 @@ fun CustomTimeInput(
         }
     }
 }
+
+//fun setAlarmForNotification(context: Context, dateTime: String) {
+//    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//    val intent = Intent(context, AlarmReceiver::class.java)
+//    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+//
+//    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+//    val timeInMillis = sdf.parse(dateTime)?.time ?: 0L
+//
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+//    } else {
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+//    }
+//
+//    Toast.makeText(context, "알림이 설정되었습니다.", Toast.LENGTH_SHORT).show()
+//}
+//
+//fun cancelAlarm(context: Context) {
+//    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//    val intent = Intent(context, AlarmReceiver::class.java)
+//    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+//
+//    alarmManager.cancel(pendingIntent)
+//    pendingIntent.cancel()
+//
+//    Toast.makeText(context, "알림이 취소되었습니다.", Toast.LENGTH_SHORT).show()
+//}
