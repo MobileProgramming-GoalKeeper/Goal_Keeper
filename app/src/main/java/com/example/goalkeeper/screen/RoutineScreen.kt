@@ -261,7 +261,8 @@ fun RoutineItem(routine: UserRoutine, toggleAlarm: () -> Unit = {}, onDelete: ()
             },
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.light_pink)
-        )
+        ),
+        shape = RoundedCornerShape(30.dp)
     ) {
         Row(
             modifier = Modifier

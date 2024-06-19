@@ -47,9 +47,6 @@ import com.example.goalkeeper.R
 import com.example.goalkeeper.component.GoalKeeperCheckBox
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles
-import com.example.goalkeeper.ui.theme.Blue1
-import com.example.goalkeeper.ui.theme.Pink1
-import com.example.goalkeeper.ui.theme.Yellow1
 import com.example.goalkeeper.viewmodel.GoalKeeperViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
