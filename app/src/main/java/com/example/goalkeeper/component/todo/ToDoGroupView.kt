@@ -49,6 +49,7 @@ import java.time.LocalDateTime
 @Composable
 fun ToDoGroupPrint(
     toDoGroup: TodoGroup,
+    todos: List<Todo> = emptyList(),
     navController: NavController
 ) {
     val viewModel: GoalKeeperViewModel =
@@ -56,11 +57,6 @@ fun ToDoGroupPrint(
 
     val colorEnum = ToDoGroupColor.valueOf(toDoGroup.color)
     val iconEnum = ToDoGroupIcon.valueOf(toDoGroup.icon)
-
-    val todoListState by viewModel.todoList.collectAsState()
-    val groupListState by viewModel.groupList.collectAsState()
-
-    var todos = todoListState.filter { it.groupId == toDoGroup.groupId }
 
     var showAddDialog by remember { mutableStateOf(false) }
 
