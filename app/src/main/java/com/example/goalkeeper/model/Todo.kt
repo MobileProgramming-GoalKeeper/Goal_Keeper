@@ -33,10 +33,7 @@ data class Todo (
             할일: ${todoName}
             날짜: ${todoDate}
             메모: ${todoMemo}
-            완료 여부: ${if (todoDone) "완료" else "미완료"}
-            ${if (childTodo!=null && childTodo.isNotEmpty()) {
-            "<서브 할일>: \n"+ childTodo.joinToString("\n") { it.toText() }
-            } else ""}    
+            완료 여부: ${if (todoDone) "완료" else "미완료"}   
         """.trimIndent()
     }
 }
