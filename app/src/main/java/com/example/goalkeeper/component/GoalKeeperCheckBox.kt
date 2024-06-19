@@ -33,7 +33,9 @@ fun GoalKeeperCheckBox(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(40.dp)
             )
         }
     }
