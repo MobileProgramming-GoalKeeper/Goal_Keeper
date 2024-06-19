@@ -49,10 +49,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import java.time.format.TextStyle
 import java.util.Locale
 import androidx.compose.ui.graphics.Color
 import com.example.goalkeeper.component.todo.SubTodoDetailView
+import com.example.goalkeeper.model.Todo
+import com.example.goalkeeper.model.toStringFormat
+import kotlin.reflect.KProperty
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -72,6 +76,16 @@ fun HomeScreen() {
     val groupListState by viewModel.groupList.collectAsState()
     val todoListState by viewModel.todoList.collectAsState()
 
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var todayTodos by remember(todoListState, selectedDate) {
+        mutableStateOf(filterTodosByDate(todoListState, selectedDate))
+    }
+
+    // 선택된 날짜에 따라 todayTodos 업데이트
+    LaunchedEffect(todoListState, selectedDate) {
+        todayTodos = filterTodosByDate(todoListState, selectedDate)
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -79,16 +93,18 @@ fun HomeScreen() {
         Column(modifier = Modifier.fillMaxSize()) {
             Calender(
                 modifier = Modifier.padding(16.dp),
-                onSelectedDate = { selectedDate ->
-                    // 선택한 날짜 처리
-                    // todoListState filter {todo.todoDate.toString() == selectedDate.toString()} 처리..
-                    Log.d("Calender", "Selected date: $selectedDate")
+                currentDate = selectedDate,
+                onSelectedDate = { newSelectedDate ->
+                    selectedDate = newSelectedDate
+                    todayTodos = filterTodosByDate(todoListState, newSelectedDate)
+                    Log.d("Calendar", "Selected date: $selectedDate")
                 }
             )
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(groupListState) { todoGroup ->
-                    ToDoGroupPrint(toDoGroup = todoGroup, navController = navController)
+                    val filteredTodos = todayTodos.filter { it.groupId == todoGroup.groupId }
+                    ToDoGroupPrint(toDoGroup = todoGroup, todos=filteredTodos, navController = navController)
                 }
             }
         }
@@ -105,15 +121,14 @@ fun HomeScreen() {
         ) { backStackEntry ->
             val todoId = backStackEntry.arguments?.getString("todoId")
             if (todoId != null) {
-                todoListState.forEach { todo ->
-                    val todo = todoListState.find { it.todoId == todoId }
+                todayTodos.forEach { todo ->
+                    val todo = todayTodos.find { it.todoId == todoId }
                     if (todo != null) {
                         TodoDetailView(
                             todo = todo,
                             navController = navController
                         )
                     }
-//                        return@composable
                 }
             }
         }
@@ -266,5 +281,13 @@ fun Day(
             .clickable(onClick = onClick)
     ) {
         Text(text = day.dayOfMonth.toString(), color = textColor)
+    }
+}
+
+//filter todos by selected date
+private fun filterTodosByDate(todoList: List<Todo>, selectedDate: LocalDate): List<Todo> {
+    return todoList.filter { todo ->
+        val selectedDateTimeString = selectedDate.atStartOfDay().toStringFormat(time = false) // 시간을 포함하지 않는 경우
+        todo.todoDate.toString() == selectedDateTimeString
     }
 }
