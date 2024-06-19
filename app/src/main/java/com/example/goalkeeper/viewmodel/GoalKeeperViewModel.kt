@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.goalkeeper.model.SubTodo
 import com.example.goalkeeper.model.ToDoGroupColor
 import com.example.goalkeeper.model.ToDoGroupIcon
 import com.example.goalkeeper.model.Todo
@@ -33,6 +35,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
     private lateinit var groupRepository: GroupRepository
     private lateinit var routineRepository: RoutineRepository
     private lateinit var todoRepository: TodoRepository
+    private lateinit var subTodoRepository: SubTodoRepository
 
     private var _todoList = MutableStateFlow<List<Todo>>(emptyList())
     val todoList = _todoList.asStateFlow()
@@ -40,6 +43,8 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
     val groupList = _groupList.asStateFlow()
     private var _routineList = MutableStateFlow<List<UserRoutine>>(emptyList())
     val routineList = _routineList.asStateFlow()
+    private var _subTodoList = MutableStateFlow<List<SubTodo>>(emptyList())
+    val subTodoList = _subTodoList.asStateFlow()
 
     var user = mutableStateOf<UserInfo?>(null)
 
@@ -110,6 +115,14 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             }
         }
     }
+
+    fun fetchSubTodos() {
+        viewModelScope.launch {
+            subTodoRepository.getAllSubTodo().collect { stodos ->
+                _subTodoList.value = stodos
+            }
+        }
+    }
     fun insertTodoItem(todo: Todo): String { //inserTodo 이걸로 사용해주세용
         viewModelScope.launch {
             val todoID = todoRepository.insertTodo(todo) ?: ""
@@ -124,6 +137,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             }
             fetchTodos()
             fetchGroups()
+            fetchSubTodos()
             return@launch
         }
         return todo.todoId
@@ -143,22 +157,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         // Fetch current data
         fetchGroups()
         fetchTodos()
-
-        viewModelScope.launch {
-            groupList.value.forEach {
-                groupRepository.DeleteGroup(it)
-            }
-        }.join()
-
-        viewModelScope.launch {
-            todoList.value.forEach {
-                todoRepository.deleteTodo(it)
-            }
-        }.join()
-
-        // Wait for deletions to complete
-        _groupList.emit(emptyList())
-        _todoList.emit(emptyList())
+        fetchSubTodos()
 
 
         val exTodoGroup = TodoGroup(
@@ -216,8 +215,11 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             }
             todoRepository.deleteTodo(todo)
 
+            deleteSubsByRootId(todo.todoId)
+
             fetchTodos()
             fetchGroups()
+            fetchSubTodos()
         }
     }
 
@@ -304,11 +306,43 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             GroupRepository(dbReference.child("users").child(userInfo.userId).child("groups"))
         routineRepository =
             RoutineRepository(dbReference.child("users").child(userInfo.userId).child("routines"))
+        subTodoRepository =
+            SubTodoRepository(dbReference.child("users").child(userInfo.userId).child("subTodos"))
     }
 
+    fun insertSubItem(stodo: SubTodo, rootId: String) {
+        viewModelScope.launch {
+            subTodoRepository.insertSubTodo(stodo,rootId)
+        }
+    }
+
+    fun deleteSubItem(stodo: SubTodo) {
+        viewModelScope.launch {
+            subTodoRepository.deleteSubTodo(stodo)
+        }
+    }
+
+    fun updateSubItem(stdo:SubTodo){
+        viewModelScope.launch {
+            subTodoRepository.updateSubName(stdo)
+            subTodoRepository.updateSubMemo(stdo)
+            subTodoRepository.updateSubDone(stdo)
+        }
+    }
     fun updateAlertTodoItem(todo:Todo) {
         viewModelScope.launch {
             todoRepository.updatetodoAlert(todo)
+        }
+    }
+
+    fun deleteSubsByRootId(rootTodoId: String) {
+        viewModelScope.launch {
+            fetchSubTodos()
+            _subTodoList.value?.forEach{
+                if(it.rootTodoId == rootTodoId)
+                    subTodoRepository.deleteSubTodo(it)
+            }
+            fetchSubTodos()
         }
     }
 }
