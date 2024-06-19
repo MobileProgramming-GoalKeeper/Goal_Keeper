@@ -79,7 +79,6 @@ fun TimeScreen() {
                     Modifier.padding(end = 30.dp)
                 )
             }
-            Spacer(modifier = Modifier.height(90.dp))
             if (isSwitchOn) {
                 TimeOnScreen()
             } else {
@@ -95,7 +94,7 @@ fun TimeOnScreen() {
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
     val today = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
-    val todayString = today.format(formatter) // 2024년 06월 12일
+    val todayString = today.format(formatter)
     val hours = (0..24).map { if (it == 0) "" else "%02d:00".format(it - 1) }
     val minutes = listOf("", "0~", "10~", "20~", "30~", "40~", "50~")
     val todoListState by viewModel.todoList.collectAsState()
@@ -108,7 +107,8 @@ fun TimeOnScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column(Modifier.verticalScroll(rememberScrollState())
+            .padding(top = 30.dp, bottom = 30.dp)) {
             for (i in hours.indices) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -129,7 +129,7 @@ fun TimeOnScreen() {
                             }
                         } else emptyList()
                         val alphaValue = if (cellTodos.size > 1) {
-                            (1f - (cellTodos.size * 0.2f).coerceAtMost(0.2f))
+                            (1f - (cellTodos.size * 0.25f))
                         } else {
                             1f
                         }
@@ -159,16 +159,12 @@ fun TimeOnScreen() {
                             contentAlignment = Alignment.Center
                         ) {
                             if (i == 0 && j == 0) {
-                                // 빈 칸 (왼쪽 상단)
                                 Text(text = "")
                             } else if (i == 0) {
-                                // 첫 번째 행 (간격 표시)
                                 Text(text = minutes[j])
                             } else if (j == 0) {
-                                // 첫 번째 열 (시간 표시)
                                 Text(text = hours[i])
                             } else {
-                                // 나머지 칸 (시간표 셀)
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
                                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -206,7 +202,7 @@ fun ShowPopup(todoList: List<Todo>, onDismiss: () -> Unit) {
                 text = popupTitle,
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp  // 이 부분은 필요에 따라 추가했습니다.
+                    fontSize = 25.sp
                 )
             )
         },
@@ -241,7 +237,8 @@ fun TimeOffScreen() {
         todoDateOnly == todayString
     }.sortedBy { todo -> todo.todoStartAt }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .padding(top = 30.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
