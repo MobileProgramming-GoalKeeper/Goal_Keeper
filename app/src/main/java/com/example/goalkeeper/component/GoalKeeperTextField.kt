@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.goalkeeper.style.AppStyles.loginTextStyle
 
@@ -25,6 +28,8 @@ fun GoalKeeperTextField(
     maxLength: Int = Int.MAX_VALUE,
     onValueChange: (String) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier = Modifier
             .size(width = width.dp, height = height.dp)
@@ -53,7 +58,8 @@ fun GoalKeeperTextField(
                 unfocusedIndicatorColor = Color.Transparent
             ),
             shape = CircleShape,
-            textStyle = loginTextStyle
+            textStyle = loginTextStyle,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
         )
     }
 }
