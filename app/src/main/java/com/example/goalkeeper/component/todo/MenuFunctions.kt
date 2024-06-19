@@ -86,9 +86,9 @@ fun ChangeDate(
     var selectedDateTime by remember { mutableStateOf(if (todo.todoStartAt != "") todo.todoStartAt.toLocalDateTime() else todo.todoDate.toLocalDateTime()) }
     var showTimePicker by remember { mutableStateOf(false) }
 
-    var selectedEndHour by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime().hour else LocalDateTime.now().hour) }
-    var selectedEndMinute by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime().minute else LocalDateTime.now().minute / 10 * 10) }
-    var selectedEndDateTime by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime() else todo.todoDate.toLocalDateTime()) }
+    var selectedEndHour by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime().hour else LocalDateTime.now().plusMinutes(10).hour) }
+    var selectedEndMinute by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime().minute else LocalDateTime.now().plusMinutes(10).minute / 10 * 10) }
+    var selectedEndDateTime by remember { mutableStateOf(if (todo.todoEndAt != "") todo.todoEndAt.toLocalDateTime() else todo.todoDate.toLocalDateTime().plusMinutes(10)) }
     var showEndTimePicker by remember { mutableStateOf(false) }
 
     if (showDatePicker) {
