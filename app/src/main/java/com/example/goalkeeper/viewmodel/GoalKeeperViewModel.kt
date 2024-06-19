@@ -193,7 +193,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
         var todoEX = Todo()
         todoEX.groupId=groupId
         todoEX.todoName="치과가기"
-        todoEX.todoDate= LocalDateTime.of(2024, 6, 2, 0, 0).toStringFormat(true)
+        todoEX.todoDate= LocalDateTime.of(2024, 6, 2,0,0).toStringFormat(false)
         todoEX.todoStartAt = LocalDateTime.of(2024, 6, 2, 9, 0).toStringFormat(true)
         todoEX.todoEndAt = LocalDateTime.of(2024, 6, 2, 10, 30).toStringFormat(true)
         todoEX.todoMemo = "사랑니 빼야됨 ㅜㅜ"

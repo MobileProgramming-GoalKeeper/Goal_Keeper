@@ -15,12 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
@@ -162,10 +156,10 @@ fun TodoDetailView(
                 maxLength = MAX_TODO_MEMO
             )
 
-            TodoMenuRow("시간 알림", Icons.Filled.Notifications, {
+            TodoMenuRow("시간 알림", R.drawable.ic_notification, {
                 showNotificationDialog = true
             })
-            TodoMenuRow("내일 하기", Icons.AutoMirrored.Filled.ArrowForward) {
+            TodoMenuRow("내일 하기", R.drawable.ic_arrow_forward) {
                 viewModel.updatePostponeTodoItem(todo)
                 val newDate = todo.todoDate.toLocalDateTime().plusDays(1).toStringFormat(false)
                 viewModel.updateDateTodoItem(todo, newDate)
@@ -176,17 +170,17 @@ fun TodoDetailView(
                     viewModel.updateTimeTodoItem(todo, newStartAt, newEndAt)
                 }
             }
-            TodoMenuRow("날짜/시간 바꾸기", Icons.Filled.DateRange) {
+            TodoMenuRow("날짜/시간 바꾸기", R.drawable.ic_date_range) {
                 showDatePicker = true
 //                calculateDateTime(todo, selectedDate, viewModel)
             }
-            TodoMenuRow("그룹 바꾸기", Icons.Filled.ExitToApp) {
+            TodoMenuRow("그룹 바꾸기", R.drawable.ic_drive_file_move) {
                 showChangeGroup = true
             }
-            TodoMenuRow("세부 할 일 추가하기", Icons.Filled.ArrowDropDown) {
+            TodoMenuRow("세부 할 일 추가하기", R.drawable.ic_playlist_add) {
                 showAddSub = true
             }
-            TodoMenuRow("삭제하기", Icons.Filled.Delete) {
+            TodoMenuRow("삭제하기", R.drawable.ic_delete) {
                 viewModel.deleteTodoItem(todo)
                 navController.popBackStack()
             }

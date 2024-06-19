@@ -3,8 +3,6 @@ package com.example.goalkeeper.screen
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.time.DayOfWeek
 import java.time.YearMonth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -49,17 +46,11 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import java.time.format.TextStyle
-import java.util.Locale
 import androidx.compose.ui.graphics.Color
 import com.example.goalkeeper.component.todo.SubTodoDetailView
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.model.toStringFormat
-import kotlin.reflect.KProperty
 
-
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun HomeScreen() {
 

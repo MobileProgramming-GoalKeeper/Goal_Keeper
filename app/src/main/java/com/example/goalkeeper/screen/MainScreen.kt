@@ -1,6 +1,8 @@
 package com.example.goalkeeper.screen
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
@@ -11,8 +13,10 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.R
+import com.example.goalkeeper.component.RectWithRoundedEnds
 import com.example.goalkeeper.nav.BottomNavItem
 import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.style.AppStyles.engTitleStyle
@@ -76,7 +81,8 @@ fun BottomNavigationBar(navController: NavHostController) {
     )
 
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.violet)
+        backgroundColor = colorResource(id = R.color.violet),
+        modifier = Modifier.height(55.dp)
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -84,13 +90,19 @@ fun BottomNavigationBar(navController: NavHostController) {
         items.forEach { item ->
             BottomNavigationItem(
                 icon = {
-                    Icon(
-                        item.icon, contentDescription = item.title,
-                        modifier = Modifier.size(50.dp),
-                        tint = if (currentRoute == item.route) colorResource(R.color.violet_dark) else colorResource(
-                            id = R.color.light_pink
+                    Box(contentAlignment = Alignment.Center) {
+                        RectWithRoundedEnds(width = 90, height = 40,
+                            color=if(currentRoute == item.route) colorResource(id = R.color.violet_mid)
+                                else colorResource(id = R.color.violet))
+                        Icon(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = item.title,
+                            modifier = Modifier.size(30.dp),
+                            tint = if (currentRoute == item.route) colorResource(R.color.light_pink) else colorResource(
+                                R.color.violet_dark
+                            )
                         )
-                    )
+                    }
                 },
 //                label = { Text(item.title) },
                 selected = currentRoute == item.route,

@@ -16,13 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.goalkeeper.style.AppStyles
 
 
 @Composable
-fun TodoMenuRow(title: String, icon: ImageVector, onClick: () -> Unit) {
+fun TodoMenuRow(title: String, icon: Int, onClick: () -> Unit) {
     Spacer(modifier = Modifier.padding(10.dp))
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -39,7 +39,7 @@ fun TodoMenuRow(title: String, icon: ImageVector, onClick: () -> Unit) {
         )
         {
             Icon(
-                imageVector = icon, contentDescription = title,
+                painter = painterResource(id = icon), contentDescription = title,
                 tint = Color.White
             )
         }
