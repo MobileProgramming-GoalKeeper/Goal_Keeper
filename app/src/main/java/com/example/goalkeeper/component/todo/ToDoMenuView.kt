@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -75,10 +77,13 @@ fun TodoDetailView(
     var showChangeGroup by remember { mutableStateOf(false) }
     var showAddSub by remember { mutableStateOf(false) }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .verticalScroll(scrollState)
     ) {
         Row(
             modifier = Modifier
@@ -153,7 +158,7 @@ fun TodoDetailView(
                     viewModel.updateMemoTodoItem(updatedTodo)
                 },
                 style = AppStyles.TodoMemoStyle,
-                modifier = Modifier.size(350.dp, 100.dp),
+                modifier = Modifier.size(350.dp, 50.dp),
                 maxLength = MAX_TODO_MEMO
             )
 
