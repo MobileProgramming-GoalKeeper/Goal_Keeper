@@ -5,17 +5,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
+import com.example.goalkeeper.R
 import com.example.goalkeeper.component.EditableText
 import com.example.goalkeeper.model.MAX_TODO_MEMO
 import com.example.goalkeeper.model.MAX_TODO_MEMO_prev
@@ -74,7 +72,7 @@ fun SubTodoDetailView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TodoMenuRow("삭제하기", Icons.Filled.Delete) {
+        TodoMenuRow("삭제하기", R.drawable.ic_delete) {
             viewModel.deleteSubItem(subTodo)
             navController.popBackStack()
         }

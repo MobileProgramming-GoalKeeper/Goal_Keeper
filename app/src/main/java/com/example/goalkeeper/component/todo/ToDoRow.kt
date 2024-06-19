@@ -2,18 +2,23 @@ package com.example.goalkeeper.component.todo
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
+import com.example.goalkeeper.R
 import com.example.goalkeeper.model.MAX_TODO_MEMO_prev
 import com.example.goalkeeper.model.SubTodo
 import com.example.goalkeeper.model.Todo
@@ -57,7 +62,7 @@ fun TodoRow(todo: Todo, navController: NavController) {
             }
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                imageVector = Icons.Filled.MoreVert,
+                painterResource(id = R.drawable.ic_more_horiz),
                 contentDescription = "todoMenu",
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -102,11 +107,15 @@ fun SubTodoRow(subTodo: SubTodo, navController: NavController) {
         )
         Column {
             Text(text = name, style = TodoNameStyle)
-            Text(text = memo, style = TodoMemoStyle)
+            Text(text = memo, style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.freesentation_regular)),
+                fontSize = 10.sp,
+                color = Color.DarkGray)
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            imageVector = Icons.Filled.MoreVert,
+            painter = painterResource(id = R.drawable.ic_more_horiz),
             contentDescription = "subTodoMenu",
             modifier = Modifier
                 .padding(end = 10.dp)
