@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.goalkeeper.component.GoalKeeperAlertDialog
 import com.example.goalkeeper.component.GoalKeeperButton
+import com.example.goalkeeper.component.todo.timealarm.createTodoAlarmChannel
 import com.example.goalkeeper.nav.Routes
 import com.example.goalkeeper.notification.createNotificationChannel
 import com.example.goalkeeper.screen.MainScreen
@@ -115,6 +116,7 @@ fun MyApp() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val channelId = "routine_channel"
+    val todochannelId = "todoAlarm_Channel"
 
     val navStoreOwner = rememberViewModelStoreOwner()
     val goalKeeperDB = Firebase.database.getReference("goalkeeper")
@@ -123,6 +125,7 @@ fun MyApp() {
         viewModel(factory = GoalKeeperViewModelFactory(goalKeeperDB))
 
     createNotificationChannel(context, channelId)
+    createTodoAlarmChannel(context, todochannelId)
 
     CompositionLocalProvider(
         LocalNavGraphViewModelStoreOwner provides navStoreOwner

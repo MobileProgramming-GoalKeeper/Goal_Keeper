@@ -44,6 +44,7 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.component.ChangeGroupDiaglog
 import com.example.goalkeeper.component.EditableText
+import com.example.goalkeeper.component.todo.timealarm.setTodoAlarm
 import com.example.goalkeeper.component.GoalKeeperTextField
 import com.example.goalkeeper.model.MAX_TODO_MEMO
 import com.example.goalkeeper.model.MAX_TODO_NAME
@@ -68,6 +69,8 @@ fun TodoDetailView(
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     var showNotificationDialog by remember { mutableStateOf(false) }
+    var notificationTime by remember { mutableStateOf("") } // 알림 시간 저장
+
 
     var showChangeGroup by remember { mutableStateOf(false) }
     var showAddSub by remember { mutableStateOf(false) }
@@ -183,26 +186,37 @@ fun TodoDetailView(
                 navController.popBackStack()
             }
 
+            // 알림 설정 다이얼로그
             if (showNotificationDialog) {
                 AlertDialog(
                     onDismissRequest = { showNotificationDialog = false },
                     title = { Text("알림 설정") },
                     text = {
                         Column {
-                            Text("알림을 설정하시겠습니까?")
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                Button(onClick = {
-                                    showNotificationDialog = false
-                                    //showDatePicker = true
-                                }) {
-                                    Text("예")
+                            if (todo.todoStartAt.isNotEmpty()) {
+                                Text("설정된 시간: ${todo.todoStartAt}")
+                                Text("이 시간에 알림을 설정할까요?")
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                ) {
+                                    Button(onClick = {
+                                        showNotificationDialog = false
+                                        todo.todoAlert = true
+                                        setTodoAlarm(context, todo) // 알림 설정 함수 호출
+                                    }) {
+                                        Text("On")
+                                    }
+                                    Button(onClick = {
+                                        showNotificationDialog = false
+                                        todo.todoAlert = false
+                                        setTodoAlarm(context, todo) // 알림 해제 함수 호출
+                                    }) {
+                                        Text("Off")
+                                    }
                                 }
-                                Button(onClick = { showNotificationDialog = false }) {
-                                    Text("아니오")
-                                }
+                            } else {
+                                Text("시간이 설정되지 않았습니다. 시간을 먼저 설정해주세요.")
                             }
                         }
                     },
@@ -210,6 +224,8 @@ fun TodoDetailView(
                     dismissButton = {}
                 )
             }
+
+
 
             if (showDatePicker) {
                 ChangeDate(todo = todo,
@@ -326,4 +342,3 @@ fun AddSubTodoDialog(
         }
     }
 }
-
