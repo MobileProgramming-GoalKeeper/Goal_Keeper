@@ -3,6 +3,7 @@ package com.example.goalkeeper.component.todo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -21,6 +22,7 @@ import com.example.goalkeeper.LocalNavGraphViewModelStoreOwner
 import com.example.goalkeeper.R
 import com.example.goalkeeper.model.MAX_TODO_MEMO_prev
 import com.example.goalkeeper.model.SubTodo
+import com.example.goalkeeper.model.ToDoGroupColor
 import com.example.goalkeeper.model.Todo
 import com.example.goalkeeper.style.AppStyles.TodoMemoStyle
 import com.example.goalkeeper.style.AppStyles.TodoNameStyle
@@ -50,6 +52,14 @@ fun TodoRow(todo: Todo, navController: NavController) {
         isDone = todo.todoDone
     }
 
+    val groupList by viewModel.groupList.collectAsState()
+    var color = Color.White
+    for (todoGroup in groupList) {
+        if(todoGroup.groupId == todo.groupId){
+            color = ToDoGroupColor.valueOf(todoGroup.color).toColor()
+        }
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -59,7 +69,7 @@ fun TodoRow(todo: Todo, navController: NavController) {
                 onCheckedChange = { checked ->
                     isDone = checked
                     viewModel.updateDoneTodoItem(todo.copy(todoDone = checked))
-                }
+                },colors = CheckboxDefaults.colors(checkedColor = color )
             )
             Column {
                 Text(text = name, style = TodoNameStyle)
@@ -76,13 +86,13 @@ fun TodoRow(todo: Todo, navController: NavController) {
         }
         // SubTodos 출력
         subTodos.forEach { subTodo ->
-            SubTodoRow(subTodo = subTodo, navController = navController)
+            SubTodoRow(subTodo = subTodo, navController = navController, color)
         }
     }
 }
 
 @Composable
-fun SubTodoRow(subTodo: SubTodo, navController: NavController) {
+fun SubTodoRow(subTodo: SubTodo, navController: NavController, color: Color) {
     val viewModel: GoalKeeperViewModel =
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
@@ -108,7 +118,8 @@ fun SubTodoRow(subTodo: SubTodo, navController: NavController) {
             onCheckedChange = { checked ->
                 isDone = checked
                 viewModel.updateSubItem(subTodo.copy(subDone=checked))
-            }
+            },
+            colors = CheckboxDefaults.colors(checkedColor = color)
         )
         Column {
             Text(text = name, style = TodoNameStyle)
