@@ -257,7 +257,7 @@ fun TodoDetailView(
                         }else{ //시간정보 없다 -> 사용자가 시각 설정 안함
                             viewModel.updateTimeTodoItem(todo, "", "")
                         }
-                        viewModel.updateDateTodoItem(todo, selectedDate)
+                        viewModel.updateDateTodoItem(todo, selectedDate.toLocalDateTime().toStringFormat(false))
                     },
                     onEndDateSelected = {selectedEndDate->
                         viewModel.updateTimeTodoItem(todo,selectedDate, selectedEndDate)
