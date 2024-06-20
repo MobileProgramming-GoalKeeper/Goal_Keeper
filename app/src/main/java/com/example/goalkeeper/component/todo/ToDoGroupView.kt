@@ -97,7 +97,7 @@ fun ToDoGroupPrint(
                             todoId = "new",
                             groupId = toDoGroup.groupId,
                             todoName = title,
-                            todoDate = date,
+                            todoDate = date.toLocalDateTime().toStringFormat(false),
                             todoStartAt = startAt,
                             todoEndAt = endAt,
                             todoMemo = memo)

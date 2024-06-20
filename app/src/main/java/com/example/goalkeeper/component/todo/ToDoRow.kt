@@ -32,7 +32,12 @@ fun TodoRow(todo: Todo, navController: NavController) {
         viewModel(viewModelStoreOwner = LocalNavGraphViewModelStoreOwner.current)
 
     val subTodoList by viewModel.subTodoList.collectAsState()
-    val subTodos = subTodoList.filter { it.rootTodoId == todo.todoId }
+    var subTodos by remember(subTodoList) {
+        mutableStateOf(subTodoList.filter { it.rootTodoId == todo.todoId })
+    }
+    LaunchedEffect(subTodoList) {
+        subTodos = subTodoList.filter { it.rootTodoId == todo.todoId }
+    }
 
     var name by remember { mutableStateOf(todo.todoName) }
     var memo by remember { mutableStateOf(todo.todoMemo.take(MAX_TODO_MEMO_prev)) } //처음 30글자만
