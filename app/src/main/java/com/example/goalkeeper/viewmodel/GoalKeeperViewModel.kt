@@ -313,12 +313,14 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
     fun insertSubItem(stodo: SubTodo, rootId: String) {
         viewModelScope.launch {
             subTodoRepository.insertSubTodo(stodo,rootId)
+            fetchSubTodos()
         }
     }
 
     fun deleteSubItem(stodo: SubTodo) {
         viewModelScope.launch {
             subTodoRepository.deleteSubTodo(stodo)
+            fetchSubTodos()
         }
     }
 
@@ -327,6 +329,7 @@ class GoalKeeperViewModel(private val dbReference: DatabaseReference) : ViewMode
             subTodoRepository.updateSubName(stdo)
             subTodoRepository.updateSubMemo(stdo)
             subTodoRepository.updateSubDone(stdo)
+            fetchSubTodos()
         }
     }
     fun updateAlertTodoItem(todo:Todo) {

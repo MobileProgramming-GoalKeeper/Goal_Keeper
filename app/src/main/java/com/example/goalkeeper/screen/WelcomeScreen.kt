@@ -45,6 +45,7 @@ fun WelcomeScreen(navController: NavHostController) {
             viewModel.initRepositories(viewModel.user.value!!)
             viewModel.fetchTodos()
             viewModel.fetchGroups()
+            viewModel.fetchSubTodos()
             navController.navigate(Routes.Main.route)
         }
     }
