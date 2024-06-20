@@ -3,14 +3,14 @@ package com.example.goalkeeper.model
 import androidx.compose.ui.graphics.Color
 
 enum class ToDoGroupColor(val rgb: Int) {
-    RED(0xFF0000),
-    ORANGE(0xFFA500),
-    YELLOW(0xFFFF00),
-    GREEN(0x00FF00),
-    BLUE(0x0000FF),
-    PURPLE(0x800080),
-    PINK(0xFFC0CB),
-    BROWN(0xA52A2A);
+    RED(0xE88481),
+    ORANGE(0xFEC3A1),
+    YELLOW(0xFFD38F),
+    GREEN(0xBAD09F),
+    BLUE(0xB1C9EF),
+    PURPLE(0xC9B6E7),
+    PINK(0xFFD1D1),
+    BROWN(0x927362);
 
     override fun toString(): String {
         return name
